@@ -1,5 +1,6 @@
 import {useState}  from 'react'
-import {Routes, Route, NavLink} from 'react-router-dom'
+import {Routes, Route, NavLink, useLocation} from 'react-router-dom';
+import Login from './components/login';
 import MainPage from './components/MainPage';
 import SubirMaterial from './components/SubirMaterial';
 import VerPuntuaciones from './components/VerPuntuaciones';
@@ -18,9 +19,13 @@ export default function App() {
     { alumno: 'Ana López', examen: 'Unidad 1', nota: 90 },
     { alumno: 'Carlos Pérez', examen: 'Unidad 1', nota: 78 },
   ]
+  const location = useLocation();
+  const esLogin = location.pathname === '/';
 
   return (
     <>
+
+    {!esLogin && (
       <nav className="menu">
         <NavLink to="/">Inicio</NavLink>
         <NavLink to="/subir">Subir material</NavLink>
@@ -28,9 +33,11 @@ export default function App() {
         <NavLink to="/alumnos">Lista de alumnos</NavLink>
         <NavLink to="/materiales">Lista de material</NavLink>
       </nav>
+    )}
 
       <main>
         <Routes>
+          <Route path="/" element={<Login />}/>
           <Route path="/" element={<MainPage />} />
           <Route path="/subir" element={<SubirMaterial agregar={(m) => setMateriales([...materiales, m])} />} />
           <Route path="/puntuaciones" element={<VerPuntuaciones datos={puntuaciones} />} />
