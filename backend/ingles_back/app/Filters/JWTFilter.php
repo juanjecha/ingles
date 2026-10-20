@@ -14,25 +14,27 @@ class JWTFilter implements FilterInterface
 {
     public function before(RequestInterface $request, $arguments = null)
     {
-        $header = $request->getServer('HTTP_AUTHORIZATION');
+        $header = $request->getHeaderLine('Authorization');
  
-        if (!$header) {
+        if (!$header || !str_starts_with($header, 'Bearer ')) {
             return Services::response()
                 ->setJSON(['status' => 401, 'error' => 'Token no proporcionado'])
                 ->setStatusCode(401);
         }
  
-        $token = str_replace('Bearer ', '', $header);
-        $decodedData = JWTAuth::validateToken($token);
+        //$token = str_replace('Bearer ', '', $header);
+        $token = trim(substr($header, 7));
+        $data = JWTAuth::validateToken($token);
  
-        if (!$decodedData) {
+        if (!$data) {
             return Services::response()
                 ->setJSON(['status' => 401, 'error' => 'Token inválido o expirado'])
                 ->setStatusCode(401);
         }
  
         // Se adjuntan los datos cargados en el token a la petición
-        $request->userData = $decodedData;
+        JWTAuth::$currentUser = $data;
+        //$request->userData = $data;
     }
  
     public function after(RequestInterface $request, ResponseInterface $response, $arguments = null)

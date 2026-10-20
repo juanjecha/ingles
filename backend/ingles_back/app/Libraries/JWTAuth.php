@@ -8,6 +8,7 @@ use Exception;
  
 class JWTAuth
 {
+    public static $currentUser = null;
     private static function getSecretKey(): string
     {
         return env('JWT_SECRET_KEY', 'default_secret_key');
