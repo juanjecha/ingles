@@ -1,7 +1,7 @@
 import axios from 'axios';
  
 const api = axios.create({
-    baseURL: 'http://tu-servidor.com/api/'
+    baseURL: 'http://localhost/ingles/backend/ingles_back/public/api'
 });
  
 // Interceptor para adjuntar JWT en cada request

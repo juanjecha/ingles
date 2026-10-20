@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-
+import api from '../api/axiosConfig';
 export default function AuthView() {
   // Estado para controlar la visibilidad del modal
   const [showRegisterModal, setShowRegisterModal] = useState(false);
@@ -41,16 +41,26 @@ export default function AuthView() {
     // Agrega aquí tu llamada a la API
   };
 
-  const handleRegisterSubmit = (e) => {
-    e.preventDefault();
-    if (registerData.password !== registerData.confirmPassword) {
-      alert('Las contraseñas no coinciden');
-      return;
-    }
-    console.log('Registrando usuario:', registerData);
-    // Agrega aquí tu llamada a la API
+  const handleRegisterSubmit = async (e) => {
+  e.preventDefault();
+  if (registerData.password !== registerData.confirmPassword) {
+    alert('Las contraseñas no coinciden');
+    return;
+  }
+  try {
+    await api.post('register/teacher', {
+      name: registerData.name,
+      email: registerData.email,
+      password: registerData.password
+    });
+    alert('Cuenta creada. Ya puedes iniciar sesión.');
+    setRegisterData({ name: '', email: '', password: '', confirmPassword: '' });
     setShowRegisterModal(false);
-  };
+  } catch (err) {
+    const msg = err.response?.data?.messages?.error || 'No se pudo crear la cuenta';
+    alert(msg);
+  }
+};
 
   return (
     <div className="container min-vh-100 d-flex justify-content-center align-items-center py-5">
@@ -94,26 +104,7 @@ export default function AuthView() {
                 required
               />
             </div>
-
-            <div className="d-flex justify-content-between align-items-center mb-3">
-              <div className="form-check">
-                <input
-                  type="checkbox"
-                  className="form-check-input"
-                  id="rememberMe"
-                  name="remember"
-                  checked={loginData.remember}
-                  onChange={handleLoginChange}
-                />
-                <label className="form-check-label small" htmlFor="rememberMe">
-                  Recordarme
-                </label>
-              </div>
-              <a href="#forgot" className="text-decoration-none small">
-                ¿Olvidaste tu contraseña?
-              </a>
-            </div>
-
+            
             <div className="d-grid mb-3">
               <button type="submit" className="btn btn-primary">
                 Entrar

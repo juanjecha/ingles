@@ -59,4 +59,32 @@ class Auth extends ResourceController
         ->setJSON(["error"=> "Credenciales no válidas"]);
     }
 
+    public function register_teacher() {
+        $json = $this->request->getJSON(true) ?? [];
+        $name = trim($json['name'] ?? '');
+        $email = strtolower(trim($json['email'] ?? ''));
+        $password = $json['password'] ?? '';
+
+        if ($name === '' || $email === '' || $password === '') {
+            return $this->failValidationErrors("Nombre, correo y contraseña son obligatorios");
+        }
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return $this->failValidationErrors("El correo no es válido");
+        }
+
+        $model = new TeacherModel();
+        if ($model->where('email', $email)->first()) {
+            return $this->fail("Ese correo ya está registrado", 409);
+        }
+
+        $id = $model->insert([
+            'name' => $name,
+            'email' => $email,
+            'password' => $password,
+            'hash' => password_hash($password, PASSWORD_DEFAULT)
+        ]);
+
+        return $this->respondCreated(['success' => true, 'id' => $id]);
+    }
+
 }
