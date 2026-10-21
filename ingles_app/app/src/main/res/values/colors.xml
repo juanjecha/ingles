@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="primary_dark_green">#0B4D3C</color>
+    <color name="primary_green">#198754</color>
+    <color name="light_green_accent">#40B384</color>
+    <color name="accent_orange">#FF7043</color>
+
+    <color name="text_title">#1E293B</color>
+    <color name="text_secondary">#64748B</color>
+    <color name="bg_input">#F8FAFC</color>
+    <color name="border_input">#E2E8F0</color>
+</resources>
