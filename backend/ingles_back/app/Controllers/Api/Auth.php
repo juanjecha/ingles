@@ -15,8 +15,9 @@ class Auth extends ResourceController
  
     public function login_teacher()
     {
-        $email = $this->request->getPost('email');
-        $password = $this->request->getPost('password');
+        $json = $this->request->getJSON(true) ?? [];
+        $email = strtolower(trim($json['email'] ?? ''));
+        $password = $json['password'];
  
         $userModel = new TeacherModel();
         $user = $userModel->where('email', $email)->first();

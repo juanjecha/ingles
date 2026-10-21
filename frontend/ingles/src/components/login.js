@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import api from '../api/axiosConfig';
+import { useNavigate } from 'react-router-dom';
+
 export default function AuthView() {
+  // Control de redirección hacia la vista principal
+  const navigate = useNavigate();
+
   // Estado para controlar la visibilidad del modal
   const [showRegisterModal, setShowRegisterModal] = useState(false);
 
@@ -35,10 +40,20 @@ export default function AuthView() {
     }));
   };
 
-  const handleLoginSubmit = (e) => {
+  const handleLoginSubmit = async (e) => {
     e.preventDefault();
-    console.log('Iniciando sesión con:', loginData);
-    // Agrega aquí tu llamada a la API
+    try {
+        const res = await api.post('login/teacher', {
+            email: loginData.email,
+            password: loginData.password
+        });
+        localStorage.setItem('jwt_token', res.data.token);
+        localStorage.setItem('user', JSON.stringify(res.data.user ?? {}));
+        navigate('/inicio');
+    } catch (err) {
+        const msg = err.response?.data?.messages?.error || "No se pudo iniciar sesión";
+        alert(msg);
+    }
   };
 
   const handleRegisterSubmit = async (e) => {
@@ -104,7 +119,7 @@ export default function AuthView() {
                 required
               />
             </div>
-            
+
             <div className="d-grid mb-3">
               <button type="submit" className="btn btn-primary">
                 Entrar

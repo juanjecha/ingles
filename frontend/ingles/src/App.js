@@ -27,7 +27,7 @@ export default function App() {
 
     {!esLogin && (
       <nav className="menu">
-        <NavLink to="/">Inicio</NavLink>
+        <NavLink to="/inicio">Inicio</NavLink>
         <NavLink to="/subir">Subir material</NavLink>
         <NavLink to="/puntuaciones">Ver puntuaciones</NavLink>
         <NavLink to="/alumnos">Lista de alumnos</NavLink>
@@ -38,7 +38,7 @@ export default function App() {
       <main>
         <Routes>
           <Route path="/" element={<Login />}/>
-          <Route path="/" element={<MainPage />} />
+          <Route path="/inicio" element={<MainPage />} />
           <Route path="/subir" element={<SubirMaterial agregar={(m) => setMateriales([...materiales, m])} />} />
           <Route path="/puntuaciones" element={<VerPuntuaciones datos={puntuaciones} />} />
           <Route path="/alumnos" element={<ListaAlumnos datos={alumnos} />} />
