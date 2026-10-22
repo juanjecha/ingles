@@ -1,5 +1,6 @@
 package com.example.ingles_app;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -7,7 +8,8 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
+import android.widget.AutoCompleteTextView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,7 +26,7 @@ public class RegisterActivity extends AppCompatActivity {
     private static final String TAG = "REGISTRO";
 
     private EditText name, mat, email, pass;
-    private Spinner carr;
+    private AutoCompleteTextView carr;
     private Button btnRegister;
     private String jwtToken;
 
@@ -39,13 +41,19 @@ public class RegisterActivity extends AppCompatActivity {
             return insets;
         });
 
+        TextView tvToLogin = findViewById(R.id.tvToLogin);
+        tvToLogin.setOnClickListener(v -> {
+            startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+        });
+
         name = findViewById(R.id.etRegisterName);
         mat = findViewById(R.id.etRegisterEnrollment);
         email = findViewById(R.id.etRegisterEmail);
         pass = findViewById(R.id.etRegisterPassword);
 
-        String[] carrera = {"Elige carrera", "ISTII", "IAA", "IPGI"};
+        String[] carrera = {"ISTII", "IAA", "IPGI"};
         carr = findViewById(R.id.actvRegisterCareer);
+        carr.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, carrera));
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, carrera);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         carr.setAdapter(adapter);
@@ -71,12 +79,12 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
-        if (carr.getSelectedItemPosition() == 0) {
+        if (carr.getText().toString().trim().isEmpty()) {
             mostrarMensaje("Selecciona una carrera");
             return;
         }
 
-        String scarr = carr.getSelectedItem().toString();
+        String scarr = carr.getText().toString().trim();
 
         // Evita dobles clics mientras se envía la petición
         btnRegister.setEnabled(false);
@@ -137,7 +145,7 @@ public class RegisterActivity extends AppCompatActivity {
         mat.setText("");
         email.setText("");
         pass.setText("");
-        carr.setSelection(0);
+        carr.setText("",false);
         name.requestFocus();
     }
 
