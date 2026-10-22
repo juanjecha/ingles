@@ -17,19 +17,18 @@ class Auth extends ResourceController
     {
         $json = $this->request->getJSON(true) ?? [];
         $email = strtolower(trim($json['email'] ?? ''));
-        $password = $json['password'];
+        $password = $json['password'] ?? '';
  
         $userModel = new TeacherModel();
         $user = $userModel->where('email', $email)->first();
  
-        if (!$user || !password_verify($password, $user['password'])) {
+        if (!$user || !password_verify($password, $user['hash'])) {
             return $this->failUnauthorized('Credenciales incorrectas.');
         }
  
         $payload = [
             'id'    => $user['id'],
             'email' => $user['email'],
-            'rol'   => $user['rol'] // 'estudiante', 'docente', 'admin'
         ];
  
         $token = JWTAuth::generateToken($payload);
