@@ -11,6 +11,7 @@ class StudentModel extends Model {
         "name",
         "enrollment",
         "email",
+        "course",
         "password",
         "hash",
         "id_student_level"

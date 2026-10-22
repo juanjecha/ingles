@@ -86,7 +86,7 @@ public class RegisterActivity extends AppCompatActivity {
         try {
             ApiRequest apiRequest = new ApiRequest(sname, smat, semail, spass, scarr);
 
-            ApiCliente.getApiService().studentRegister(jwtToken, apiRequest).enqueue(new Callback<ApiResponse>() {
+            ApiCliente.getApiService().studentRegister(apiRequest).enqueue(new Callback<ApiResponse>() {
                 @Override
                 public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                     btnRegister.setEnabled(true);

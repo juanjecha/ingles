@@ -9,7 +9,7 @@ $routes->group('api', ['namespace' => 'App\Controllers\Api'], static function ($
     // Públicas
         //login
     $routes->post('login/teacher', 'Auth::login_teacher');
-    $routes->post('login/student', 'Auth::login_student');
+    //$routes->post('login/student', 'Auth::login_student');
 
         //register
     $routes->post('register/teacher', 'Auth::register_teacher');
@@ -23,3 +23,5 @@ $routes->group('api', ['namespace' => 'App\Controllers\Api'], static function ($
 // Necesaria para que CORS responda a las peticiones "preflight" del navegador
 $routes->options('api/(:any)', static function () {
 });
+
+$routes->post('register/student', 'Auth::register_student')

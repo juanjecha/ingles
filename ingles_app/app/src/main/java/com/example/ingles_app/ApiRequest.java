@@ -3,11 +3,11 @@ package com.example.ingles_app;
 import com.google.gson.annotations.SerializedName;
 
 public class ApiRequest {
-    @SerializedName("nombre")     private String nombre;
-    @SerializedName("matricula")  private String matricula;
-    @SerializedName("correo")     private String correo;
-    @SerializedName("contrasena") private String contrasena;
-    @SerializedName("carrera")    private String carrera;
+    @SerializedName("name")     private String nombre;
+    @SerializedName("enrollment")  private String matricula;
+    @SerializedName("email")     private String correo;
+    @SerializedName("password") private String contrasena;
+    @SerializedName("course")    private String carrera;
 
     public ApiRequest(String nombre, String matricula, String correo, String contrasena, String carrera) {
         this.nombre = nombre;

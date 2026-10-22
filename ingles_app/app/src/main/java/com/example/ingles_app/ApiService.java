@@ -5,10 +5,7 @@ import retrofit2.http.Body;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
 
-public class ApiService {
-    @POST("api/Students")
-    Call<Response>saveStudent(@Header("Authorization")String token, @Body Student student){
-        return null;
-    }
-
+public interface ApiService {
+    @POST("api/register/student")
+    Call<ApiResponse>studentRegister(@Body ApiRequest request);
 }
