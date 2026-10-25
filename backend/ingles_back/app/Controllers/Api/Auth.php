@@ -1,8 +1,10 @@
 <?php
  
 namespace App\Controllers\Api;
- 
+
 use CodeIgniter\RESTful\ResourceController;
+//use App\Controllers\BaseController;
+use CodeIgniter\API\ResponseTrait;
 use App\Models\TeacherModel;
 use App\Libraries\JWTAuth;
 use App\Models\StudentModel;
@@ -26,12 +28,12 @@ class Auth extends ResourceController
         if (!$user || !password_verify($password, $user['hash'])) {
             return $this->failUnauthorized('Credenciales incorrectas.');
         }
- 
+
         $payload = [
             'id'    => $user['id'],
             'email' => $user['email'],
         ];
- 
+
         $token = JWTAuth::generateToken($payload);
  
         return $this->respond([
@@ -134,7 +136,7 @@ class Auth extends ResourceController
         return $this->respondCreated([
             'status' => 201,
             'message' => 'Registro exitoso',
-            'token' => JWTAuth::generateToken($payload),
+            //'token' => JWTAuth::generateToken($payload),
             'user' => $payload
         ]);
     }

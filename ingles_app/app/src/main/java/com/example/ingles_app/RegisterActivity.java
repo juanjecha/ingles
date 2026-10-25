@@ -66,6 +66,21 @@ public class RegisterActivity extends AppCompatActivity {
             token = getSharedPreferences("preferencias", MODE_PRIVATE).getString("JWT_TOKEN", null);
         }
         jwtToken = "Bearer " + token;
+
+        /*
+        ApiCliente.getApiService().studentRegister(apiRequest).enqueue(new Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+
+            }
+        });
+
+         */
     }
 
     public void guardaAlumno() {

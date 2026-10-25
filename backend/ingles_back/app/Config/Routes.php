@@ -13,7 +13,8 @@ $routes->group('api', ['namespace' => 'App\Controllers\Api'], static function ($
 
         //register
     $routes->post('register/teacher', 'Auth::register_teacher');
-
+    $routes->post('register/student', 'Auth::register_student');
+    
     // Protegidas con JWT
     $routes->get('me', 'Auth::me', ['filter' => 'jwt']);
     $routes->post('students', 'StudentController::save_student', ['filter' => 'jwt']);
@@ -23,5 +24,3 @@ $routes->group('api', ['namespace' => 'App\Controllers\Api'], static function ($
 // Necesaria para que CORS responda a las peticiones "preflight" del navegador
 $routes->options('api/(:any)', static function () {
 });
-
-$routes->post('register/student', 'Auth::register_student')
