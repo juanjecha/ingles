@@ -60,12 +60,14 @@ public class RegisterActivity extends AppCompatActivity {
 
         btnRegister = findViewById(R.id.btnRegister);
         btnRegister.setOnClickListener(v -> guardaAlumno());
-
+       /*
         String token = getIntent().getStringExtra("JWT_TOKEN");
         if (token == null) {
             token = getSharedPreferences("preferencias", MODE_PRIVATE).getString("JWT_TOKEN", null);
         }
         jwtToken = "Bearer " + token;
+
+        */
 
         /*
         ApiCliente.getApiService().studentRegister(apiRequest).enqueue(new Callback<ApiResponse>() {

@@ -124,6 +124,7 @@ class Auth extends ResourceController
             'enrollment' => $enrollment,
             'email' => $email,
             'course' => $course,
+            'password' => $password,
             'hash' => password_hash($password,PASSWORD_DEFAULT),
         ]);
 
