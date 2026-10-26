@@ -53,6 +53,7 @@ class Auth extends ResourceController
         if($var) {
             $key = $pass;
             $payload= [
+                "iss" => "base_url",
                 "uid" => 1,
                 "user"=>"student",
                 "exp"=>time()+3600

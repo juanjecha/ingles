@@ -1,6 +1,7 @@
 <?php
 namespace App\Models;
 
+use CodeIgniter\Database\OCI8\Builder;
 use CodeIgniter\Model;
 
 class StudentModel extends Model {
@@ -28,5 +29,12 @@ class StudentModel extends Model {
             $answer = false;
         }
         return $answer;
+    }
+
+    public function connect($data = null) {
+        $res = $this->where('enrollment' ,$data['enrollment'])->get()->getRows();
+        if ($res && password_verify($data["password"], $res["password"])) {
+            return true;
+        } else return false;
     }
 }
