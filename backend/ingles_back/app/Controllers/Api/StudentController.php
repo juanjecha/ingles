@@ -3,61 +3,38 @@
 namespace App\Controllers\Api;
 
 use CodeIgniter\RESTful\ResourceController;
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 use App\Models\StudentModel;
 use App\Libraries\JWTAuth;
 
 class StudentController extends ResourceController
 {
     protected $format = 'json';
+    private $key = "84981e652b16c9bf56896419911e1aeb74955fb76c5c2d24205daa575a97c65d";
 
-    public function register_student() {
-        $json = $this->request->getJSON(true) ?? [];
-        $name = trim($json['name'] ?? '');
-        $enrollment = trim($json['enrollment'] ?? '');
-        $email = strtolower(trim($json['email'] ?? ''));
-        $course = trim($json['course']);
-        $password = $json['password'];
-
-        if ($name === '' || $enrollment === '' || $email === '' || $course === '' || $password === '') {
-            return $this->failValidationErrors("Todos los campos son obligatorios");
-        }
-        if (!ctype_digit($enrollment) || strlen($enrollment) > 9) {
-            return $this->failValidationErrors("La matrícula debe ser numérica y de 9 digitos");
-        }
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            return $this->failValidationErrors("El correo no es válido");
-        }
-        if (!in_array($course, ["ISTII", "IAA", "IPGI"], true)) {
-            return $this->failValidationErrors("La carrera no es válida");
-        }
-
+    public function login_student() {
+        $enrollment = $this->request->getVar('enrollment');
+        $password = $this->request->getVar('password');
         $model = new StudentModel();
-        if ($model->where("enrollment", $enrollment)->first()) {
-            return $this->fail("Matrícula ya registrado", 409);
-        }
-        if($model->where("email", $email)->first()) {
-            return $this->fail("Ese correo ya está registrado",409);
+
+        $student = $model->where('enrollment', $enrollment)->first();
+
+        //validate data introduced by the user in database
+        if (!$student || !password_verify($password, $student['hash'])) {
+            return $this->failUnauthorized("Credenciales incorrectas");
         }
 
-        $id = $model->insert([
-            'name' => $name,
-            'enrollment' => $enrollment,
-            'email' => $email,
-            'course' => $course,
-            'hash' => password_hash($password,PASSWORD_DEFAULT),
-        ]);
+        //$key = getenv("JWT_SECRET_KEY")?:'1de46771b19ad62fe0d54c23072ca4de3bc9e0ebf1006a2c931630ac3378eee2';
 
         $payload = [
-            'id' => (int) $id,
-            'name' => $name,
-            'enrollment' => $enrollment,
+            "iat" => time(),
+            "exp" => time() + 3600,
+            "data" => [
+                "enrollment" => $enrollment
+            ],
         ];
-
-        return $this->respondCreated([
-            'status' => 201,
-            'message' => 'Registro exitoso',
-            //'token' => JWTAuth::generateToken($payload),
-            'user' => $payload
-        ]);
+        $jwt = JWT::encode($payload, $this->key, 'HS256');
+        return $this->respond(['token' => $jwt, 'message' => 'Autenticación exitosa']);
     }
 }

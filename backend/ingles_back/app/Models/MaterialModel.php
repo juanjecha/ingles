@@ -7,9 +7,16 @@ class MaterialModel extends Model {
     protected $table = "resource";
 
     protected $primaryKey = 'id';
-    protected $allowedFields = ['categoria_id', 'name', 'img', 'level'];
+    protected $allowedFields = ['category_id', 'name', 'img', 'level'];
 
-    public function save_material(int $category, string $word, $) {
-        model
+    public function save_material(int $category, string $word, $string image) {
+        $model = new MaterialModel();
+            $model->insert([
+                'word' => $word,
+                'img' => $word,
+                'category' => $category,
+            ]);
+
+        return $this->insert($data);
     }
 }
