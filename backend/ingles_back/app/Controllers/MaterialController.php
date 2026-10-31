@@ -55,5 +55,17 @@ class MaterialController extends ResourceController {
             }
         }
     }
-    
+
+
+    public function render_flashcards() {
+        $model = new MaterialModel();
+        $category = $this->request->getVar('category');
+        $level = $this->request->getVar('level');
+        $data = [
+            'category' => $category,
+            'level' => $level
+        ];
+        $card = $model->flashcard();
+        return $this->respond($card);
+    }
 }

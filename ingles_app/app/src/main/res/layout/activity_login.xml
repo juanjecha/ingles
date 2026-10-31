@@ -55,11 +55,11 @@
                 android:orientation="vertical"
                 android:padding="24dp">
 
-                <!-- Campo Email -->
+                <!-- Campo matricula -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Correo Electrónico"
+                    android:text="Matrícula"
                     android:textColor="@color/text_title"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -80,8 +80,8 @@
                         android:id="@+id/etLoginEmail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="ejemplo@alumno.edu"
-                        android:inputType="textEmailAddress" />
+                        android:hint="202012345"
+                        android:inputType="number" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <!-- Campo Contraseña -->

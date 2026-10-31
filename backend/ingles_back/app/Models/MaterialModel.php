@@ -19,4 +19,10 @@ class MaterialModel extends Model {
 
         return $this->insert($data);
     }
+
+    public function flashcard($data = null) {
+        $query = "SELECT * FROM resource WHERE category = ".$data['category']." AND level <= ".$data['level'];
+        $res = $this->query($query);
+        return $res;
+    }
 }

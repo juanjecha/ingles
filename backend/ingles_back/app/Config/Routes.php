@@ -21,8 +21,12 @@ $routes->group('api', ['namespace' => 'App\Controllers\Api'], static function ($
     
         // Material
     $routes->post('newMaterial', 'MaterialController::new_content');
+
 });
 
 // Necesaria para que CORS responda a las peticiones "preflight" del navegador
 $routes->options('api/(:any)', static function () {
 });
+
+//flashcard
+$routes->get('api/flashcards', 'MaterialController::render_flashcards');

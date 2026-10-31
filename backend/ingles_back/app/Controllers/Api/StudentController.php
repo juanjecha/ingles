@@ -11,13 +11,17 @@ use App\Libraries\JWTAuth;
 class StudentController extends ResourceController
 {
     protected $format = 'json';
-    private $key = "84981e652b16c9bf56896419911e1aeb74955fb76c5c2d24205daa575a97c65d";
 
     public function login_student() {
-        $enrollment = $this->request->getVar('enrollment');
-        $password = $this->request->getVar('password');
-        $model = new StudentModel();
 
+        $json = $this->request->getJSON(true) ?? [];
+        $enrollment = trim((string) ($json['enrollment'] ?? ''));
+        $password = $json['password'];
+
+        if ($enrollment === '' || $password === '') {
+            return $this->failValidationErrors('Matrícula y contraseña son obligatorias');
+        }
+        $model = new StudentModel();
         $student = $model->where('enrollment', $enrollment)->first();
 
         //validate data introduced by the user in database
@@ -25,16 +29,26 @@ class StudentController extends ResourceController
             return $this->failUnauthorized("Credenciales incorrectas");
         }
 
-        //$key = getenv("JWT_SECRET_KEY")?:'1de46771b19ad62fe0d54c23072ca4de3bc9e0ebf1006a2c931630ac3378eee2';
-
         $payload = [
-            "iat" => time(),
-            "exp" => time() + 3600,
-            "data" => [
-                "enrollment" => $enrollment
-            ],
+            "id" => (int) $student['id'], 
+            "name" => $student['name'], 
+            "enrollment" => (string) $student['enrollment']
         ];
-        $jwt = JWT::encode($payload, $this->key, 'HS256');
-        return $this->respond(['token' => $jwt, 'message' => 'Autenticación exitosa']);
+
+        //$jwt = JWT::encode($payload, $this->key, 'HS256');
+        return $this->respond([
+            'status' => 200,
+            'message' => 'Autenticación exitosa',
+            'token' => JWTAuth::generateToken($payload),
+            'user' => $payload,
+            ]);
+    }
+
+    public function students_list() {
+        $course = $this->request->getVar('course');
+        $data = ['course' => $course];
+        $student = new StudentModel();
+        $res = $student->show_students($data);
+        return $this->respond($res);
     }
 }

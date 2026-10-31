@@ -1,6 +1,8 @@
 package com.example.ingles_app;
 
 import android.os.Bundle;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,6 +11,10 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class FlashcardActivity extends AppCompatActivity {
+    ImageView img1;
+    TextView t1;
+    private int id;
+    private String image, title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

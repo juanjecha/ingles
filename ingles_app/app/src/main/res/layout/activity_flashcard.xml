@@ -7,4 +7,20 @@
     android:layout_height="match_parent"
     tools:context=".FlashcardActivity">
 
+    <LinearLayout
+        android:layout_width="182px"
+        android:layout_height="222px"
+        >
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@mipmap/ic_launcher"
+            tools:layout_editor_absoluteX="144dp"
+            tools:layout_editor_absoluteY="96dp" />
+
+    </LinearLayout>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
