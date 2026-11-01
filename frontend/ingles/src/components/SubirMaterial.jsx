@@ -14,7 +14,7 @@ export default function SubirMaterial({ agregar }) {
 
   useEffect(() => {
     api.get('categories').then((res) => setCategories(res.data))
-    .catch(() => alert('No se pudieron cargar las categorías'))
+    .catch(() => alert('Categories could not be showed up'))
   }, [])
 
   const chooseImg = (e) => {
@@ -36,11 +36,11 @@ export default function SubirMaterial({ agregar }) {
     setSending(true)
     try {
       await api.post('newMaterial', data)
-      alert('Material subido correctamente')
+      alert('Resource uploaded succesfully')
       navigate('/materiales')
     } catch (err) {
       const errors = err.response?.data?.messages
-      alert(errors ? Object.values(errors).join('\n') : 'No se pudo subir el material')
+      alert(errors ? Object.values(errors).join('\n') : 'Resource could not be uploaded')
     } finally {
       setSending(false)
     }

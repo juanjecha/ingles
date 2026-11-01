@@ -8,9 +8,6 @@ import ListaAlumnos from './components/ListaAlumnos';
 import ListMaterial from './components/ListMaterial';
 
 export default function App() {
-  const [materiales, setMateriales] = useState([
-    { titulo: 'Verb To Be', tipo: 'PDF', descripcion: 'Ejercicios básicos' },
-  ])
   const alumnos = [
     { id: 1, nombre: 'Ana López', nivel: 'A1' },
     { id: 2, nombre: 'Carlos Pérez', nivel: 'A2' },
@@ -42,7 +39,7 @@ export default function App() {
           <Route path="/subir" element={<SubirMaterial />} />
           <Route path="/puntuaciones" element={<VerPuntuaciones datos={puntuaciones} />} />
           <Route path="/alumnos" element={<ListaAlumnos datos={alumnos} />} />
-          <Route path="/materiales" element={<ListMaterial datos={materiales} />} />
+          <Route path="/materiales" element={<ListMaterial/>} />
         </Routes>
       </main>
     </>

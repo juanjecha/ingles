@@ -22,6 +22,7 @@ $routes->group('api', ['namespace' => 'App\Controllers\Api'], static function ($
         // Material
     $routes->post('newMaterial', 'MaterialController::new_content', ['filter' => 'jwt']);
     $routes->get('categories', 'MaterialController::categories', ['filter' => 'jwt']);
+    $routes->get('resources', 'MaterialController::resources', ['filter' => 'jwt']);
 });
 
 // Necesaria para que CORS responda a las peticiones "preflight" del navegador

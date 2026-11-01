@@ -24,4 +24,12 @@ class MaterialModel extends Model {
         $res = $this->query($query);
         return $res;
     }
+
+    public function resources_list(): array
+    {
+        return $this->select("resource.id, resource.name, resource.img, category.name, category.difficulty, AS level")
+                    ->join("category", "category.id = resource.category_id")
+                    ->orderBy("resource.id", "DESC")
+                    ->findAll();
+    }
 }

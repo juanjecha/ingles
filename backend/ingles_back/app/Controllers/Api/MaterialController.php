@@ -73,6 +73,9 @@ class MaterialController extends ResourceController {
             ]); 
     }
 
+    public function resources() {
+        return $this->respond($this->MaterialModel->resources_list());
+    }
 
     public function render_flashcards() {
         $model = new MaterialModel();
