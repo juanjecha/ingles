@@ -17,7 +17,7 @@ $routes->group('api', ['namespace' => 'App\Controllers\Api'], static function ($
     
         // Protegidas con JWT
     $routes->get('me', 'Auth::me', ['filter' => 'jwt']);
-    $routes->post('students', 'StudentController::save_student', ['filter' => 'jwt']);
+    //$routes->post('students', 'StudentController::save_student', ['filter' => 'jwt']);
     
         // Material
     $routes->post('newMaterial', 'MaterialController::new_content', ['filter' => 'jwt']);

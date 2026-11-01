@@ -1,5 +1,5 @@
 <?php
-namespace App\Controllers;
+namespace App\Controllers\Api;
 
 use App\Libraries\JWTAuth;
 use CodeIgniter\RESTful\ResourceController;
@@ -22,8 +22,7 @@ class MaterialController extends ResourceController {
     }
 
     public function categories() {
-        $rows = $this->CategoryModel->list();
-        return $rows;
+        return $this->respond($this->CategoryModel->list());
     }
 
     public function new_content() {
@@ -39,7 +38,7 @@ class MaterialController extends ResourceController {
             'word' => 'required|string|max_length[150]',
             'category' => 'required|is_natural_no_zero|is_not_unique[category.id]',
             //'level' => 'required|is_natural_no_zero',
-            'image' => 'uploaded[image]|is_image[image]|mime_in[image, image/jpg,image/jpeg,image/png,image/webp]|max_size[image,2048]',
+            'image' => 'uploaded[image]|is_image[image]|mime_in[image,image/jpg,image/jpeg,image/png,image/webp]|max_size[image,2048]',
         ];
 
         if (! $this->validate($rules)) {
@@ -53,7 +52,7 @@ class MaterialController extends ResourceController {
         }
 
         $newName = $file->getRandomName();
-        $file->move(FCPATH, 'uploads', $newName);
+        $file->move(FCPATH . 'uploads', $newName);
 
         $id = $this->MaterialModel->save_material(
             (int) $this->request->getPost('category'),
