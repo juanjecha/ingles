@@ -6,11 +6,26 @@ use CodeIgniter\RESTful\ResourceController;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use App\Models\MaterialModel;
+use App\Models\CategoryModel;
 use CodeIgniter\Controller;
 use Config\Validation;
 use Exception;
 
 class MaterialController extends ResourceController {
+    protected $MaterialModel;
+    protected $CategoryModel;
+
+    public function __construct()
+    {
+        $this->MaterialModel = new MaterialModel();
+        $this->CategoryModel = new CategoryModel();
+    }
+
+    public function categories() {
+        $rows = $this->CategoryModel->list();
+        return $rows;
+    }
+
     public function new_content() {
         //validar credenciales de autenticación
         $user = JWTAuth::$currentUser;
@@ -28,7 +43,7 @@ class MaterialController extends ResourceController {
         ];
 
         if (! $this->validate($rules)) {
-            return $this->failValidationErrors($validation->getErrors());
+            return $this->failValidationErrors($this->validator->getErrors());
         }
 
         //procesar almacenamiento de imagen
@@ -40,7 +55,7 @@ class MaterialController extends ResourceController {
         $newName = $file->getRandomName();
         $file->move(FCPATH, 'uploads', $newName);
 
-        $id = (new MaterialModel())->save_material(
+        $id = $this->MaterialModel->save_material(
             (int) $this->request->getPost('category'),
             trim((string) $this->request->getPost('word')),
             $newName,
