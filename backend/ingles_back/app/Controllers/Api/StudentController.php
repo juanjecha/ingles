@@ -32,7 +32,8 @@ class StudentController extends ResourceController
         $payload = [
             "id" => (int) $student['id'], 
             "name" => $student['name'], 
-            "enrollment" => (string) $student['enrollment']
+            "enrollment" => (string) $student['enrollment'],
+            "rol" => "student",
         ];
 
         //$jwt = JWT::encode($payload, $this->key, 'HS256');

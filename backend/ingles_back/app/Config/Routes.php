@@ -19,9 +19,7 @@ $routes->group('api', ['namespace' => 'App\Controllers\Api'], static function ($
     $routes->get('me', 'Auth::me', ['filter' => 'jwt']);
     $routes->post('students', 'StudentController::save_student', ['filter' => 'jwt']);
     
-        // Material
-    $routes->post('newMaterial', 'MaterialController::new_content');
-
+        
 });
 
 // Necesaria para que CORS responda a las peticiones "preflight" del navegador
@@ -30,3 +28,7 @@ $routes->options('api/(:any)', static function () {
 
 //flashcard
 $routes->get('api/flashcards', 'MaterialController::render_flashcards');
+
+// Material
+    $routes->post('newMaterial', 'MaterialController::new_content', ['filter' => 'jwt']);
+    $routes->get('categories', 'MaterialController::categories', ['filter' => 'jwt']);

@@ -7,17 +7,16 @@ class MaterialModel extends Model {
     protected $table = "resource";
 
     protected $primaryKey = 'id';
-    protected $allowedFields = ['category_id', 'name', 'img', 'level'];
+    protected $allowedFields = ['category_id', 'name', 'img',];
+    protected $returnType = 'array';
 
-    public function save_material(int $category, string $word, $string image) {
-        $model = new MaterialModel();
-            $model->insert([
-                'word' => $word,
-                'img' => $word,
-                'category' => $category,
+    public function save_material(int $category, string $word, string $img) {
+            return $this->insert([
+                'category_id' => $category,
+                'name' => $word,
+                'img' => $img,
+                //'level' => $level,
             ]);
-
-        return $this->insert($data);
     }
 
     public function flashcard($data = null) {

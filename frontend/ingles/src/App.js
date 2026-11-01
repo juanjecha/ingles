@@ -39,7 +39,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Login />}/>
           <Route path="/inicio" element={<MainPage />} />
-          <Route path="/subir" element={<SubirMaterial agregar={(m) => setMateriales([...materiales, m])} />} />
+          <Route path="/subir" element={<SubirMaterial />} />
           <Route path="/puntuaciones" element={<VerPuntuaciones datos={puntuaciones} />} />
           <Route path="/alumnos" element={<ListaAlumnos datos={alumnos} />} />
           <Route path="/materiales" element={<ListMaterial datos={materiales} />} />

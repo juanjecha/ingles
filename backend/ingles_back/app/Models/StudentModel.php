@@ -41,6 +41,6 @@ class StudentModel extends Model {
     public function show_students($data = null) {
         $query = "SELECT s.name, s.enrollment, s.course
                   FROM student s
-                  INNER JOIN student_level "
+                  INNER JOIN student_level ";
     }
 }

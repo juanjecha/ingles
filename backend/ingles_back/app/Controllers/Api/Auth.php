@@ -32,6 +32,7 @@ class Auth extends ResourceController
         $payload = [
             'id'    => $user['id'],
             'email' => $user['email'],
+            'rol' => 'teacher',
         ];
 
         $token = JWTAuth::generateToken($payload);
