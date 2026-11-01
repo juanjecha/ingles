@@ -6,11 +6,11 @@ const FILES_URL = api.defaults.baseURL.replace(/\/api\/?$/, '') + '/uploads/'
 
 export default function ListMaterial({ datos }) {
   const [materials, setMaterials] = useState([])
-  const [loading, setLoading] = useState([])
+  const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
   useEffect(() => {
-      api.get('materials').then((res) => setMaterials(res.data))
+      api.get('resources').then((res) => setMaterials(res.data))
       .catch((err) => {
         console.error(err)
         setError('Error charging resources')

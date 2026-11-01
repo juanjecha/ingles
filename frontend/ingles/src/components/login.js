@@ -1,22 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import api from '../api/axiosConfig';
 import { useNavigate } from 'react-router-dom';
 
 export default function AuthView() {
-  // Control de redirección hacia la vista principal
+  // Redirection control to the main view
   const navigate = useNavigate();
 
-  // Estado para controlar la visibilidad del modal
+  // Visibility of the modal
   const [showRegisterModal, setShowRegisterModal] = useState(false);
 
-  // Estados para el formulario de Login
+  // Form login states
   const [loginData, setLoginData] = useState({
     email: '',
     password: '',
     remember: false
   });
 
-  // Estados para el formulario de Registro
+  // Form register states
   const [registerData, setRegisterData] = useState({
     name: '',
     email: '',
@@ -77,20 +77,27 @@ export default function AuthView() {
   }
 };
 
+  useEffect(() => {
+    if (sessionStorage.getItem('expired_session')) {
+      sessionStorage.removeItem('expired_session');
+      alert('Your session has died. Try to log in again');
+    }
+  }, []);
+
   return (
     <div className="container min-vh-100 d-flex justify-content-center align-items-center py-5">
-      {/* Tarjeta de Login */}
+      {/* Login card */}
       <div className="card shadow-sm w-100" style={{ maxWidth: '420px' }}>
         <div className="card-body p-4">
           <div className="text-center mb-4">
-            <h3 className="card-title fw-bold">Iniciar Sesión</h3>
-            <p className="text-muted small">Ingresa tus credenciales para acceder</p>
+            <h3 className="card-title fw-bold">Login</h3>
+            <p className="text-muted small">Put your credentials to get access</p>
           </div>
 
           <form onSubmit={handleLoginSubmit}>
             <div className="mb-3">
               <label htmlFor="loginEmail" className="form-label">
-                Correo electrónico
+                Email
               </label>
               <input
                 type="email"
@@ -106,7 +113,7 @@ export default function AuthView() {
 
             <div className="mb-3">
               <label htmlFor="loginPassword" className="form-label">
-                Contraseña
+                Password
               </label>
               <input
                 type="password"
@@ -122,7 +129,7 @@ export default function AuthView() {
 
             <div className="d-grid mb-3">
               <button type="submit" className="btn btn-primary">
-                Entrar
+                Log in
               </button>
             </div>
           </form>
@@ -136,13 +143,13 @@ export default function AuthView() {
               className="btn btn-link p-0 small text-decoration-none fw-bold"
               onClick={() => setShowRegisterModal(true)}
             >
-              Regístrate aquí
+              Create an account
             </button>
           </div>
         </div>
       </div>
 
-      {/* Modal de Registro */}
+      {/* Modal Register */}
       {showRegisterModal && (
         <>
           <div
@@ -167,7 +174,7 @@ export default function AuthView() {
                   <div className="modal-body">
                     <div className="mb-3">
                       <label htmlFor="regName" className="form-label">
-                        Nombre completo
+                        Name
                       </label>
                       <input
                         type="text"
@@ -183,7 +190,7 @@ export default function AuthView() {
 
                     <div className="mb-3">
                       <label htmlFor="regEmail" className="form-label">
-                        Correo electrónico
+                        Email
                       </label>
                       <input
                         type="email"
@@ -200,7 +207,7 @@ export default function AuthView() {
                     <div className="row">
                       <div className="col-md-6 mb-3">
                         <label htmlFor="regPassword" className="form-label">
-                          Contraseña
+                          Password
                         </label>
                         <input
                           type="password"
@@ -215,7 +222,7 @@ export default function AuthView() {
                       </div>
                       <div className="col-md-6 mb-3">
                         <label htmlFor="regConfirmPassword" className="form-label">
-                          Confirmar
+                          Confirm your password
                         </label>
                         <input
                           type="password"
@@ -237,10 +244,10 @@ export default function AuthView() {
                       className="btn btn-secondary"
                       onClick={() => setShowRegisterModal(false)}
                     >
-                      Cancelar
+                      Back
                     </button>
                     <button type="submit" className="btn btn-success">
-                      Crear Cuenta
+                      Create account 
                     </button>
                   </div>
                 </form>
@@ -248,7 +255,7 @@ export default function AuthView() {
             </div>
           </div>
 
-          {/* Backdrop oscuro para el modal */}
+          
           <div
             className="modal-backdrop fade show"
             onClick={() => setShowRegisterModal(false)}
