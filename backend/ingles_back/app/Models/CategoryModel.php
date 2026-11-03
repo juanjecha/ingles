@@ -7,7 +7,7 @@ class CategoryModel extends Model {
     protected $table = "category";
 
     protected $primaryKey = 'id';
-    protected $allowedFields = ['name', 'difficulty'];
+    protected $allowedFields = ['name', 'difficulty', 'ord', 'status'];
     protected $returnType = 'array';
 
     public function list() {

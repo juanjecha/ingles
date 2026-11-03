@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+import { clearSession, getTokenExp } from './api/session';
 import {Routes, Route, NavLink, useLocation, useNavigate} from 'react-router-dom';
 import Login from './components/login';
 import MainPage from './components/MainPage';
@@ -15,10 +17,6 @@ function getUser() {
 }
 
 export default function App() {
-  const alumnos = [
-    { id: 1, nombre: 'Ana López', nivel: 'A1' },
-    { id: 2, nombre: 'Carlos Pérez', nivel: 'A2' },
-  ]
   const puntuaciones = [
     { alumno: 'Ana López', examen: 'Unidad 1', nota: 90 },
     { alumno: 'Carlos Pérez', examen: 'Unidad 1', nota: 78 },
@@ -28,9 +26,32 @@ export default function App() {
   const esLogin = location.pathname === '/';
   const user = getUser;
 
+  useEffect(() => {
+    if (esLogin) return;
+
+    const closeSession = (exp) => {
+      clearSession(exp);
+      navigate('/', {replace: true });
+    };
+
+    const token = localStorage.getItem('jwt_token');
+    const exp = getTokenExp(token);
+
+    //without token, go to login
+    if (!exp || exp <= Date.now()) {
+      closeSession(!!token);
+      return;
+    }
+
+    //if it stays in the same view, logout once token expires
+    const id = setTimeout(() => closeSession(true), exp - Date.now());
+    return () => clearTimeout(id);
+  }, [location.pathname, esLogin, navigate]
+    
+);
+
   const handleLogout = () => {
-    localStorage.removeItem('jwt_token');
-    localStorage.removeItem('user');
+    clearSession();
     navigate('/', { replace: true});
   }
 
@@ -82,7 +103,7 @@ export default function App() {
           <Route path="/main" element={<MainPage />} />
           <Route path="/upload" element={<SubirMaterial />} />
           <Route path="/scores" element={<VerPuntuaciones datos={puntuaciones} />} />
-          <Route path="/students" element={<ListaAlumnos datos={alumnos} />} />
+          <Route path="/students" element={<ListaAlumnos />} />
           <Route path="/resources" element={<ListMaterial/>} />
         </Routes>
       </main>

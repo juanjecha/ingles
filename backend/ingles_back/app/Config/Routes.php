@@ -18,11 +18,16 @@ $routes->group('api', ['namespace' => 'App\Controllers\Api'], static function ($
         // Protegidas con JWT
     $routes->get('me', 'Auth::me', ['filter' => 'jwt']);
     //$routes->post('students', 'StudentController::save_student', ['filter' => 'jwt']);
+    $routes->get('students', 'StudentController::students_list', ['filter' => 'jwt']);
     
         // Material
     $routes->post('newMaterial', 'MaterialController::new_content', ['filter' => 'jwt']);
     $routes->get('categories', 'MaterialController::categories', ['filter' => 'jwt']);
     $routes->get('resources', 'MaterialController::resources', ['filter' => 'jwt']);
+
+        // Mobile app
+    $routes->get('categories', 'VocabularyController::getCategories');
+    $routes->get('flashcards', 'VocabyularyController::getFlashcards');
 });
 
 // Necesaria para que CORS responda a las peticiones "preflight" del navegador

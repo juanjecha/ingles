@@ -1,13 +1,11 @@
-package com.example.ingles_app;
-import com.example.ingles_app.api.CategoryResponse;
-import com.example.ingles_app.api.FlashcardResponse;
-import com.example.ingles_app.entities.Category;
+package com.example.ingles_app.api;
+
+import com.example.ingles_app.DB.ApiRequest;
+import com.example.ingles_app.DB.LoginRequest;
 
 import retrofit2.Call;
-import retrofit2.Response;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
-import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 

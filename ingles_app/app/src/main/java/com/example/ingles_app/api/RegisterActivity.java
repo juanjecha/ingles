@@ -1,4 +1,4 @@
-package com.example.ingles_app;
+package com.example.ingles_app.api;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,6 +16,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.example.ingles_app.DB.ApiRequest;
+import com.example.ingles_app.R;
 
 import retrofit2.Call;
 import retrofit2.Callback;

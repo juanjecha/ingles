@@ -46,10 +46,11 @@ class StudentController extends ResourceController
     }
 
     public function students_list() {
-        $course = $this->request->getVar('course');
-        $data = ['course' => $course];
-        $student = new StudentModel();
-        $res = $student->show_students($data);
-        return $this->respond($res);
+        $user = JWTAuth::$currentUser;
+        if (($user->rol ?? '') !== 'teacher') {
+            return $this->failForbidden("Only teachers can see this view");
+        }
+
+        return $this->respond((new StudentModel())->show_students());
     }
 }

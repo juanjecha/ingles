@@ -32,4 +32,8 @@ class MaterialModel extends Model {
                     ->orderBy("resource.id", "DESC")
                     ->findAll();
     }
+
+    public function getFlashcardsByCat($categoryID) {
+        return $this->where('category_id', $categoryID)->findAll();
+    }
 }

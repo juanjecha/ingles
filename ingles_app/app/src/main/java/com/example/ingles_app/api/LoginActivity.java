@@ -1,4 +1,4 @@
-package com.example.ingles_app;
+package com.example.ingles_app.api;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,6 +10,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.ingles_app.DB.LoginRequest;
+import com.example.ingles_app.R;
 
 import retrofit2.Call;
 import retrofit2.Callback;

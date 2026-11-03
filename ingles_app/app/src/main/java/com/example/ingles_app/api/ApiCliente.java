@@ -1,11 +1,5 @@
-package com.example.ingles_app;
-import com.example.ingles_app.entities.Flashcards;
+package com.example.ingles_app.api;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import kotlin.reflect.KFunction;
-import retrofit2.Callback;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -29,9 +23,9 @@ public class ApiCliente {
     }
 
     // Progress
-    // public static ProgressApiService getProgressService() {
-    //     return getRetrofitInstance().create(ProgressApiService.class);
-    // }
+    public static ProgressApiService getProgressService() {
+        return getRetrofitInstance().create(ProgressApiService.class);
+    }
 
     //get flashcards list
     /*

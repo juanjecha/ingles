@@ -5,6 +5,9 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_LOCAL_NETWORK" />
 
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -15,6 +18,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Ingles_app"
         android:usesCleartextTraffic="true">
+
+
+        <service android:name=".services.FlashcardOverlayService" android:exported="false" />
+
+        <receiver android:name=".receivers.ScreenReceiver" android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.SCREEN_ON" />
+            </intent-filter>
+        </receiver>
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -26,11 +39,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".RegisterActivity"
+            android:name=".api.RegisterActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustResize"></activity>
         <activity
-            android:name=".LoginActivity"
+            android:name=".api.LoginActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustResize"></activity>
         <activity

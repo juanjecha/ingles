@@ -1,4 +1,4 @@
-package com.example.ingles_app;
+package com.example.ingles_app.entities;
 
 public class Student {
     private String name, enrollment, email, course, password, hash;
