@@ -13,16 +13,25 @@ public class ApiCliente {
     private static final String BASE_URL = "http://192.168.1.10/ingles/backend/ingles_back/public/";
     private static Retrofit retrofit=null;
 
-    public static ApiService getApiService() {
+    private static Retrofit getRetrofitInstance() {
         if (retrofit == null) {
             retrofit = new Retrofit.Builder()
                     .baseUrl(BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
         }
-        return retrofit.create(ApiService.class);
-
+        return retrofit;
     }
+
+    // Vocabulary
+    public static ApiService getApiService() {
+        return getRetrofitInstance().create(ApiService.class);
+    }
+
+    // Progress
+    // public static ProgressApiService getProgressService() {
+    //     return getRetrofitInstance().create(ProgressApiService.class);
+    // }
 
     //get flashcards list
     /*
