@@ -20,14 +20,14 @@ $routes->group('api', ['namespace' => 'App\Controllers\Api'], static function ($
     //$routes->post('students', 'StudentController::save_student', ['filter' => 'jwt']);
     $routes->get('students', 'StudentController::students_list', ['filter' => 'jwt']);
     
-        // Material
+        // Material (web)
     $routes->post('newMaterial', 'MaterialController::new_content', ['filter' => 'jwt']);
-    $routes->get('categories', 'MaterialController::categories', ['filter' => 'jwt']);
+    $routes->get('material/categories', 'MaterialController::categories', ['filter' => 'jwt']);
     $routes->get('resources', 'MaterialController::resources', ['filter' => 'jwt']);
 
         // Mobile app
     $routes->get('categories', 'VocabularyController::getCategories');
-    $routes->get('flashcards', 'VocabyularyController::getFlashcards');
+    $routes->get('flashcards', 'VocabularyController::getFlashcards');
 });
 
 // Necesaria para que CORS responda a las peticiones "preflight" del navegador

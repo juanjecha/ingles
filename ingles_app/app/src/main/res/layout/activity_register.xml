@@ -20,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:text="Crear Cuenta"
+            android:text="Register"
             android:textColor="@color/white"
             android:textSize="26sp"
             android:textStyle="bold" />
@@ -29,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="Regístrate para comenzar tus módulos de inglés"
+            android:text="Let's start your way in English"
             android:textColor="#B2DFDB"
             android:textSize="13sp" />
     </LinearLayout>
@@ -59,7 +59,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Nombre Completo"
+                    android:text="Full name"
                     android:textColor="@color/text_title"
                     android:textStyle="bold" />
 
@@ -107,7 +107,7 @@
                         android:id="@+id/etRegisterEnrollment"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Ej. 202400123"
+                        android:hint="Example: 202400123"
                         android:inputType="textCapCharacters" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -116,7 +116,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Carrera"
+                    android:text="Course"
                     android:textColor="@color/text_title"
                     android:textStyle="bold" />
 
@@ -145,7 +145,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Correo Institucional"
+                    android:text="Academic Email"
                     android:textColor="@color/text_title"
                     android:textStyle="bold" />
 
@@ -173,7 +173,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Contraseña"
+                    android:text="Password"
                     android:textColor="@color/text_title"
                     android:textStyle="bold" />
 
@@ -194,7 +194,7 @@
                         android:id="@+id/etRegisterPassword"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Crea una contraseña segura"
+                        android:hint="**********"
                         android:inputType="textPassword" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -204,7 +204,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
                     android:backgroundTint="@color/primary_green"
-                    android:text="Registrarme"
+                    android:text="Register"
                     android:textAllCaps="false"
                     android:textSize="16sp"
                     android:textStyle="bold"
@@ -218,7 +218,7 @@
                     android:layout_gravity="center"
                     android:layout_marginTop="16dp"
                     android:layout_marginBottom="16dp"
-                    android:text="¿Ya tienes cuenta? Inicia sesión"
+                    android:text="Have an account? Go log in"
                     android:textColor="@color/accent_orange"
                     android:textSize="14sp"
                     android:textStyle="bold" />

@@ -13,7 +13,7 @@ export default function SubirMaterial({ agregar }) {
   const navigate = useNavigate()
 
   useEffect(() => {
-    api.get('categories').then((res) => setCategories(res.data))
+    api.get('material/categories').then((res) => setCategories(res.data))
     .catch(() => alert('Categories could not be showed up'))
   }, [])
 

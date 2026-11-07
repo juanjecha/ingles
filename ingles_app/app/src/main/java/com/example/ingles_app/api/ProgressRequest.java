@@ -6,6 +6,9 @@ public class ProgressRequest {
     @SerializedName("user_id")
     public int userID;
 
+    @SerializedName("category_id")
+    public int categoryID;
+
     @SerializedName("passed_test")
     public int passedTest;
 

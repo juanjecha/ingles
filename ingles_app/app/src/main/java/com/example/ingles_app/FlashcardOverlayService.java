@@ -14,13 +14,11 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.ingles_app.DB.AppDatabase;
 import com.example.ingles_app.entities.Flashcards;
 
-import org.w3c.dom.Text;
-
 import java.util.List;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -59,7 +57,7 @@ public class FlashcardOverlayService extends Service {
         return START_NOT_STICKY;
     }
 
-    @Override
+    //@Override
     private void showFloatingCard(String word, String imageUrl) {
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
 

@@ -22,6 +22,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import com.example.ingles_app.api.ProgressApiService;
+import com.example.ingles_app.api.GeneralResponse;
+
 public class TestActivity extends AppCompatActivity {
     private TextView txtProgress, txtWordToTest;
     private Button[] optionButtons = new Button[4];
@@ -125,7 +128,11 @@ public class TestActivity extends AppCompatActivity {
         if (checked) {
             Toast.makeText(this, "Congratulations. New category available", Toast.LENGTH_LONG).show();
             ProgressApiService service = ApiCliente.getProgressService();
-            Call<GeneralResponse> call = service.saveProgress(service);
+            
+            // TODO: Replace '1' with the actual ID of the logged-in user.
+            int userId = 1; 
+            com.example.ingles_app.api.ProgressRequest request = new com.example.ingles_app.api.ProgressRequest(userId, categoryID, 1);
+            Call<GeneralResponse> call = service.saveProgress(request);
 
             call.enqueue(new Callback<GeneralResponse>() {
                 @Override

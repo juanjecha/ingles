@@ -38,9 +38,9 @@ class StudentModel extends Model {
         } else return false;
     }
 
-    public function show_students($data = null) {
+    public function show_students(): array {
         return $this->select("student.id, student.name, student.enrollment, student.email, student.course, student_level.level")
-        ->join("students_level", "students_level.id = student.id_student_level","left")
+        ->join("student_level", "student_level.id = student.id_student_level","left")
         ->orderBy("student.name", "ASC")->findAll();
     }
 

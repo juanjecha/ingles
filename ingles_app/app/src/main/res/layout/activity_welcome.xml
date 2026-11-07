@@ -30,7 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Aprende, practica y domina el idioma"
+            android:text="Reach a higher level in English"
             android:textColor="#B2DFDB"
             android:textSize="14sp" />
     </LinearLayout>
@@ -54,7 +54,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Bienvenido"
+                android:text="Welcome"
                 android:textColor="@color/text_title"
                 android:textSize="24sp"
                 android:textStyle="bold" />
@@ -64,7 +64,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:layout_marginBottom="24dp"
-                android:text="Elige una opción para continuar con tus clases"
+                android:text="Choose an option to continue"
                 android:textColor="@color/text_secondary"
                 android:textSize="14sp" />
 
@@ -74,7 +74,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:backgroundTint="@color/primary_green"
-                android:text="Iniciar Sesión"
+                android:text="Log in"
                 android:textAllCaps="false"
                 android:textSize="16sp"
                 android:textStyle="bold"
@@ -87,7 +87,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:layout_marginTop="12dp"
-                android:text="Crear Cuenta"
+                android:text="Create an account"
                 android:textAllCaps="false"
                 android:textColor="@color/primary_green"
                 android:textSize="16sp"

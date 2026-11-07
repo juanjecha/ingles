@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="¡Hola de nuevo!"
+            android:text="¡Hi, there!"
             android:textColor="@color/white"
             android:textSize="28sp"
             android:textStyle="bold" />
@@ -28,7 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="Ingresa tus credenciales de la academia"
+            android:text="Get into your progress"
             android:textColor="#B2DFDB"
             android:textSize="14sp" />
     </LinearLayout>
@@ -80,7 +80,7 @@
                         android:id="@+id/etLoginEmail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="202012345"
+                        android:hint="Example: 202012345"
                         android:inputType="number" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -88,7 +88,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Contraseña"
+                    android:text="Password"
                     android:textColor="@color/text_title"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -120,7 +120,7 @@
                     android:layout_height="56dp"
                     android:layout_marginTop="28dp"
                     android:backgroundTint="@color/primary_green"
-                    android:text="Iniciar Sesión"
+                    android:text="Log in"
                     android:textAllCaps="false"
                     android:textSize="16sp"
                     android:textStyle="bold"
@@ -133,7 +133,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="20dp"
-                    android:text="¿No tienes cuenta? Regístrate aquí"
+                    android:text="Have no account? Let's get started"
                     android:textColor="@color/accent_orange"
                     android:textSize="14sp"
                     android:textStyle="bold" />

@@ -23,4 +23,10 @@ public interface VocabularyDAO {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertCategories(List<Category> categories);
+
+    @Query("UPDATE category SET blocked_by_default = :isBlocked WHERE id = :categoryId")
+    void unblockCategory(int categoryId, boolean isBlocked);
+
+    @Query("UPDATE category SET blocked_by_default = :isDone WHERE id = :categoryId")
+    void updateProgressCategory(int categoryId, boolean isDone);
 }

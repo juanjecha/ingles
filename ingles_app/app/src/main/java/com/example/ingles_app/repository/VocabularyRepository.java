@@ -5,6 +5,7 @@ import android.content.Context;
 import com.example.ingles_app.api.ApiCliente;
 import com.example.ingles_app.DB.AppDatabase;
 import com.example.ingles_app.api.CategoryResponse;
+import com.example.ingles_app.api.GeneralResponse;
 import com.example.ingles_app.api.ProgressRequest;
 
 import java.util.concurrent.ExecutorService;
@@ -51,18 +52,16 @@ public class VocabularyRepository {
     public void passedTest(int userID, int currentCategoryID, int nextCategoryID) {
         // Update local DB with Room
         executorService.execute(() -> {
-            AppDatabase db = AppDatabase.getINSTANCE(context);
             //Mark current category as 'done' and unblock the next one
-            db.vocabularyDAO().updateProgressCategory(nextCategoryID, true);
-            db.vocabularyDAO().unblockCategory(nextCategoryID, false);
+            database.vocabularyDAO().updateProgressCategory(nextCategoryID, true);
+            database.vocabularyDAO().unblockCategory(nextCategoryID, false);
         });
 
         // 2. Send POST to CodeIgniter backend
         ProgressRequest request = new ProgressRequest(userID, currentCategoryID, 1);
-        ApiCliente.getProgressService().saveProgress(request).enqueue(new Callback<GeneralResponse>())
-        {
+        ApiCliente.getProgressService().saveProgress(request).enqueue(new Callback<GeneralResponse>() {
             @Override
-            public void onResponse(Call<GeneralResponse> call, Response<GeneralReponse> response) {
+            public void onResponse(Call<GeneralResponse> call, Response<GeneralResponse> response) {
                 if(response.isSuccessful()) {
                     Log.d("SYNC", "Progress locally synchronized in Room and next unlocked category at the server");
                 }
@@ -70,8 +69,8 @@ public class VocabularyRepository {
 
             @Override
             public void onFailure(Call<GeneralResponse> call, Throwable t){
-                Log.e("SYNC", "No connection. Progress storaged in Room to synchronize then")
+                Log.e("SYNC", "No connection. Progress storaged in Room to synchronize then");
             }
-        }
+        });
     }
 }
