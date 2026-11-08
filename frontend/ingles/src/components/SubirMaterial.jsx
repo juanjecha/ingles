@@ -11,6 +11,7 @@ export default function SubirMaterial({ agregar }) {
   const [categories, setCategories] = useState([])
   const [sending, setSending] = useState(false)
   const navigate = useNavigate()
+  const [translation, setTranslation] = useState('')
 
   useEffect(() => {
     api.get('material/categories').then((res) => setCategories(res.data))
@@ -29,6 +30,7 @@ export default function SubirMaterial({ agregar }) {
 
     const data = new FormData()
     data.append('word', word)
+    data.append('translation', translation)
     data.append('category', category)
     //data.append('level', level)
     data.append('image', file)
@@ -57,6 +59,12 @@ export default function SubirMaterial({ agregar }) {
         onChange={(e) => setword(e.target.value)}
         required
       />
+
+      <label htmlFor="translation">Translation</label>
+      <input type="text" id="translation"
+      value={translation}
+      onChange={(e) => setTranslation(e.target.value)}
+      required/>
 
       <label htmlFor="category">Category</label>
       <select id="category"

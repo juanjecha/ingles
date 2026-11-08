@@ -7,13 +7,14 @@ class MaterialModel extends Model {
     protected $table = "resource";
 
     protected $primaryKey = 'id';
-    protected $allowedFields = ['category_id', 'name', 'img',];
+    protected $allowedFields = ['category_id', 'name', 'translation', 'img',];
     protected $returnType = 'array';
 
-    public function save_material(int $category, string $word, string $img) {
+    public function save_material(int $category, string $word, string $translation, string $img) {
             return $this->insert([
                 'category_id' => $category,
                 'name' => $word,
+                'translation' => $translation,
                 'img' => $img,
                 //'level' => $level,
             ]);
@@ -27,13 +28,19 @@ class MaterialModel extends Model {
 
     public function resources_list(): array
     {
-        return $this->select("resource.id, resource.name, resource.img, category.name AS category, category.difficulty AS level")
+        return $this->select("resource.id, resource.name, resource.translation, resource.img, category.name AS category, category.difficulty AS level")
                     ->join("category", "category.id = resource.category_id")
                     ->orderBy("resource.id", "DESC")
                     ->findAll();
     }
 
-    public function getFlashcardsByCat($categoryID) {
-        return $this->where('category_id', $categoryID)->findAll();
+    //Flascards by a published category (app)
+    public function getFlashcardsByCat(int $categoryID): array {
+        return $this->select('resource.id', 'resource.category_id', 'resource.name AS word, resource.translation, resource.img')
+        ->join('category', 'category.id = resource.category.id')
+        ->where('resource.category_id', $categoryID)
+        ->where('category_status', 1)
+        ->orderBy('resource.id', 'ASC')
+        ->findAll();
     }
 }

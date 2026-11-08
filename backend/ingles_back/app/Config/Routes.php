@@ -1,5 +1,6 @@
 <?php
 
+use App\Controllers\Api\ProgressController;
 use CodeIgniter\Router\RouteCollection;
 
 /** @var RouteCollection $routes */
@@ -28,6 +29,8 @@ $routes->group('api', ['namespace' => 'App\Controllers\Api'], static function ($
         // Mobile app
     $routes->get('categories', 'VocabularyController::getCategories');
     $routes->get('flashcards', 'VocabularyController::getFlashcards');
+    $routes->get('progress', 'ProgressController::index', ['filter' => 'jwt']);
+    $routes->post('progress', 'ProgressController::save', ['filter' => 'jwt']);
 });
 
 // Necesaria para que CORS responda a las peticiones "preflight" del navegador
@@ -35,5 +38,4 @@ $routes->options('api/(:any)', static function () {
 });
 
 //flashcard
-$routes->get('api/flashcards', 'MaterialController::render_flashcards');
-
+//$routes->get('api/flashcards', 'MaterialController::render_flashcards');
