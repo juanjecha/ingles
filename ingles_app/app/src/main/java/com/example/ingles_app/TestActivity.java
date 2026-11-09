@@ -22,7 +22,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import com.example.ingles_app.api.ProgressApiService;
+import com.example.ingles_app.repository.VocabularyRepository;
 import com.example.ingles_app.api.GeneralResponse;
 
 public class TestActivity extends AppCompatActivity {
@@ -127,24 +127,6 @@ public class TestActivity extends AppCompatActivity {
 
         if (checked) {
             Toast.makeText(this, "Congratulations. New category available", Toast.LENGTH_LONG).show();
-            ProgressApiService service = ApiCliente.getProgressService();
-            
-            // TODO: Replace '1' with the actual ID of the logged-in user.
-            int userId = 1; 
-            com.example.ingles_app.api.ProgressRequest request = new com.example.ingles_app.api.ProgressRequest(userId, categoryID, 1);
-            Call<GeneralResponse> call = service.saveProgress(request);
-
-            call.enqueue(new Callback<GeneralResponse>() {
-                @Override
-                public void onResponse(Call<GeneralResponse> call, Response<GeneralResponse> response) {
-                    //Manejo de respuesta exitosa
-                }
-
-                @Override
-                public void onFailure (Call<GeneralResponse> call, Throwable t) {
-                    //Manejar error de conexión
-                }
-            });
         } else {
             Toast.makeText(this, "You didn't reach an enough score. Please,try again", Toast.LENGTH_LONG).show();
         }

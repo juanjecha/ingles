@@ -7,6 +7,7 @@ import androidx.room.Query;
 
 import com.example.ingles_app.entities.Category;
 import com.example.ingles_app.entities.Flashcards;
+import com.example.ingles_app.entities.ProgressEntity;
 
 import java.util.List;
 
@@ -19,14 +20,40 @@ public interface VocabularyDAO {
     List<Flashcards> getFlashcardsByCat(int categoryID);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertFlashcard(List<Flashcards> flashcards);
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertCategories(List<Category> categories);
 
-    @Query("UPDATE category SET blocked_by_default = :isBlocked WHERE id = :categoryId")
-    void unblockCategory(int categoryId, boolean isBlocked);
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertFlashcards(List<Flashcards> flashcards);
 
-    @Query("UPDATE category SET blocked_by_default = :isDone WHERE id = :categoryId")
-    void updateProgressCategory(int categoryId, boolean isDone);
+
+
+
+
+
+
+    @Query("DELETE FROM category WHERE id NOT IN (:ids)")
+    void deleteCategoriesNotIN(List<Integer> ids);
+
+    @Query("DELETE FROM resource WHERE category_id = :categoryID AND id NOT IN (:ids)")
+    void deleteFlashcardsNotIn(int categoryID, List<Integer> ids);
+
+    @Query("DELETE FROM resource WHERE category_id NOT IN (SELECT id FROM category)")
+    void deleteOrphanFlashcards();
+
+
+
+
+
+    //Progress
+    @Query("SELECT * FROM progress")
+    List<ProgressEntity> getProgress();
+
+    @Query("SELECT * FROM progress WHERE category_id = :categoryID")
+    ProgressEntity getProgressByCat(int categoryID);
+
+    @Query("SELECT * FROM progress WHERE pending_sync = 1")
+    List<ProgressEntity> getPendingProgress();
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void saveProgress(ProgressEntity progress);
 }

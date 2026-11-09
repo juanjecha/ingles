@@ -50,7 +50,7 @@ public class FlashcardOverlayService extends Service {
 
             //Get back to the main thread to draw the window
             new Handler(Looper.getMainLooper()).post(() -> {
-                showFloatingCard(card.word, card.imgUrl);
+                showFloatingCard(card.word, card.img);
             });
         }
 

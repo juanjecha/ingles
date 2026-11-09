@@ -41,7 +41,7 @@ class ProgressController extends ResourceController {
     //POST api/progress
     public function save() {
         $user =JWTAuth::$currentUser;
-        if(($user->rol ?? '') ==! 'student') {
+        if(($user->rol ?? '') !== 'student') {
             return $this->failForbidden('Only students have progress saved');
         }
 

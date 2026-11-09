@@ -27,8 +27,8 @@ $routes->group('api', ['namespace' => 'App\Controllers\Api'], static function ($
     $routes->get('resources', 'MaterialController::resources', ['filter' => 'jwt']);
 
         // Mobile app
-    $routes->get('categories', 'VocabularyController::getCategories');
-    $routes->get('flashcards', 'VocabularyController::getFlashcards');
+    $routes->get('categories', 'VocabularyController::getCategories', ['filter' => 'jwt']);
+    $routes->get('flashcards', 'VocabularyController::getFlashcards', ['filter' => 'jwt'] );
     $routes->get('progress', 'ProgressController::index', ['filter' => 'jwt']);
     $routes->post('progress', 'ProgressController::save', ['filter' => 'jwt']);
 });

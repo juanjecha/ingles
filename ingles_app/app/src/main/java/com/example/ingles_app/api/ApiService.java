@@ -16,6 +16,14 @@ public interface ApiService {
     @POST("api/login/student")
     Call<ApiResponse>studentLogin(@Body LoginRequest request);
 
-    @GET("categories") Call<CategoryResponse> getCategories();
-    @GET("flashcards") Call<FlashcardResponse> getFlashcards(@Query("category_id") int categoryID);
+    @GET("api/categories")
+    Call<CategoryResponse> getCategories();
+    @GET("api/flashcards")
+    Call<FlashcardResponse> getFlashcards(@Query("category_id") int categoryID);
+
+    @GET("api/progress")
+    Call<ProgressResponse> getProgress();
+
+    @POST("api/progress")
+    Call<GeneralResponse> saveProgress(@Body ProgressRequest request);
 }

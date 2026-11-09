@@ -8,8 +8,9 @@ import androidx.room.RoomDatabase;
 
 import com.example.ingles_app.entities.Category;
 import com.example.ingles_app.entities.Flashcards;
+import com.example.ingles_app.entities.ProgressEntity;
 
-@Database(entities = {Category.class, Flashcards.class}, version = 1)
+@Database(entities = {Category.class, Flashcards.class, ProgressEntity.class}, version = 2)
 public abstract class AppDatabase extends RoomDatabase {
 
     public abstract VocabularyDAO vocabularyDAO();

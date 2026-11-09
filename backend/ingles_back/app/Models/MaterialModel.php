@@ -36,10 +36,10 @@ class MaterialModel extends Model {
 
     //Flascards by a published category (app)
     public function getFlashcardsByCat(int $categoryID): array {
-        return $this->select('resource.id', 'resource.category_id', 'resource.name AS word, resource.translation, resource.img')
-        ->join('category', 'category.id = resource.category.id')
+        return $this->select('resource.id, resource.category_id, resource.name AS word, resource.translation, resource.img')
+        ->join('category', 'category.id = resource.category_id')
         ->where('resource.category_id', $categoryID)
-        ->where('category_status', 1)
+        ->where('category.status', 1)
         ->orderBy('resource.id', 'ASC')
         ->findAll();
     }

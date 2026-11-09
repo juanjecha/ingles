@@ -9,7 +9,8 @@ public class Category {
     @PrimaryKey
     public int id;
     public String name;
+    public String difficulty;
     public int ord;
-    @ColumnInfo(name = "blocked_by_default")
-    public boolean blockedByDefault;
+    //@ColumnInfo(name = "blocked_by_default")
+    //public boolean blockedByDefault;
 }

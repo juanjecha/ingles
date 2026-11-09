@@ -32,7 +32,7 @@ class VocabularyController extends ResourceController {
     }
 
     public function getFlashcards() {
-        $categoryID = $this->request->getGet('category_id');
+        $categoryID = (int) $this->request->getGet('category_id');
         if ($categoryID <= 0) {
             return $this->failValidationErrors('Variable category_id is required');
         }

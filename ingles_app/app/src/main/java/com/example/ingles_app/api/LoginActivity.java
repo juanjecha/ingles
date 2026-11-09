@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.ingles_app.DB.LoginRequest;
 import com.example.ingles_app.R;
+import com.example.ingles_app.repository.VocabularyRepository;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -64,6 +65,7 @@ public class LoginActivity extends AppCompatActivity {
                             if (token != null) {
                                 SharedPreferences prefs = getSharedPreferences("preferencias", MODE_PRIVATE);
                                 prefs.edit().putString("JWT_TOKEN", token).apply();
+                                new VocabularyRepository(getApplicationContext()).syncAll(null);
                             }
                             showMessage("Inicio de sesión exitoso");
                         } else if (response.code() == 401) {
