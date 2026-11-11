@@ -6,9 +6,13 @@
     <uses-permission android:name="android.permission.ACCESS_LOCAL_NETWORK" />
 
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
+        android:name=".App"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -17,15 +21,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Ingles_app"
-        android:usesCleartextTraffic="true"
-        android:name=".App">
+        android:usesCleartextTraffic="true">
 
+        <service
+            android:name=".FlashcardOverlayService"
+            android:exported="false"
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="Listens for the phone unlock event to show the student's daily vocabulary flashcard as a brief on-screen overlay" />
+        </service>
 
-        <service android:name=".services.FlashcardOverlayService" android:exported="false" />
-
-        <receiver android:name=".receivers.ScreenReceiver" android:exported="true">
+        <receiver
+            android:name=".BootReceiver"
+            android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.SCREEN_ON" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
 
@@ -35,22 +46,26 @@
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".api.RegisterActivity"
-            android:exported="true"
-            android:windowSoftInputMode="adjustResize"></activity>
-        <activity
-            android:name=".api.LoginActivity"
-            android:exported="true"
-            android:windowSoftInputMode="adjustResize"></activity>
-        <activity
-            android:name=".FlashcardActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".api.LoginActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".HomeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".FlashcardActivity"
+            android:exported="false" />
+        <activity
+            android:name=".PermissionsActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

@@ -13,7 +13,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.ingles_app.DB.LoginRequest;
 import com.example.ingles_app.R;
+import com.example.ingles_app.SessionManager;
 import com.example.ingles_app.repository.VocabularyRepository;
+import com.example.ingles_app.SessionManager;
+import com.example.ingles_app.HomeActivity;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -61,15 +64,27 @@ public class LoginActivity extends AppCompatActivity {
                         Log.d(TAG, "Codigo HTTP; " + response.code());
 
                         if (response.isSuccessful() && response.body() != null) {
-                            String token = response.body().getToken();
-                            if (token != null) {
-                                SharedPreferences prefs = getSharedPreferences("preferencias", MODE_PRIVATE);
-                                prefs.edit().putString("JWT_TOKEN", token).apply();
-                                new VocabularyRepository(getApplicationContext()).syncAll(null);
+                            ApiResponse body = response.body();
+                            String token = body().getToken();
+                            ApiResponse.User user = body.getUser();
+
+                            if (token != null && user != null) {
+                                boolean otherStudent = new SessionManager(getApplicationContext())
+                                        .save(token, user.id, user.name);
+
+                                //login from another student in the same device, delete data from the last one
+                                if (otherStudent) {
+                                    new VocabularyRepository(getApplicationContext()).clearLocalData();
+                                }
+
+                                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(intent);
+                            } else {
+                            showMessage("Unexpected server response");
                             }
-                            showMessage("Inicio de sesión exitoso");
                         } else if (response.code() == 401) {
-                            showMessage("Credenciales incorrectas");
+                            showMessage("incorrect credentials");
                         } else {
                             showMessage("Error " + response.code());
                         }

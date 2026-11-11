@@ -8,6 +8,7 @@ import androidx.room.Query;
 import com.example.ingles_app.entities.Category;
 import com.example.ingles_app.entities.Flashcards;
 import com.example.ingles_app.entities.ProgressEntity;
+import com.example.ingles_app.entities.ShownCard;
 
 import java.util.List;
 
@@ -56,4 +57,22 @@ public interface VocabularyDAO {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void saveProgress(ProgressEntity progress);
+
+    @Query("SELECT COUNT(*) FROM resource WHERE CATEGORY_ID = :categoryID")
+    int countFLashcards(int categoryID);
+
+
+    //Flashcards of the day
+    @Query("SELECT COUNT(*) FROM shown_card WHERE shown_date = :date")
+    int countShownOn(String data);
+
+    @Query("SELECT MAX(shown_at) FROM shown_card")
+    Long getLastShownAt();
+
+    @Query("SELECT * FROM flashcard WHERE category_id = :categoryID " +
+            "AND id NOT IN (SELECT flashcard_id FROM shown_card) ORDER BY id ASC LIMIT 1")
+    Flashcards getNextUnseen(int categoryID);
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    void markShown(ShownCard shown);
 }

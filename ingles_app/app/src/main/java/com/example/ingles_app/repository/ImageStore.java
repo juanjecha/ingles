@@ -63,4 +63,14 @@ public class ImageStore {
             return false;
         }
     }
+
+    //delete images when another student logs in on the same device
+    public void clear() {
+        File[] files = dir.listFiles();
+        if (files != null) {
+            for (File f : files) {
+                f.delete();
+            }
+        }
+    }
 }

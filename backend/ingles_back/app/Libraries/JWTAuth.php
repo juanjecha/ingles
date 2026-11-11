@@ -14,10 +14,10 @@ class JWTAuth
         return env('JWT_SECRET_KEY', 'default_secret_key');
     }
  
-    public static function generateToken(array $data): string
+    public static function generateToken(array $data, ?int $ttl = null): string
     {
         $issuedAt = time();
-        $ttl = (int) env('JWT_TIME_TO_LIVE', 7200);
+        $ttl = $ttl ?? (int) env('JWT_TIME_TO_LIVE', 7200);
         $payload = [
             'iss'  => 'flashcards-api',
             'iat'  => $issuedAt,

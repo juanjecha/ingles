@@ -10,8 +10,18 @@ public class ApiResponse {
     private String message;
     @SerializedName("token")
     private String token;
+    @SerializedName("user")
+    private User user;
 
     public int getStatus() { return status; }
     public String getMessage() { return message; }
     public String getToken() { return token; }
+    public User getUser() { return user; }
+
+    public static class User {
+        @SerializedName("id")
+        public int id;
+        @SerializedName("name")
+        public String name;
+    }
 }

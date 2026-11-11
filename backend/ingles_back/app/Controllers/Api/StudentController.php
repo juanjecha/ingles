@@ -40,7 +40,7 @@ class StudentController extends ResourceController
         return $this->respond([
             'status' => 200,
             'message' => 'Autenticación exitosa',
-            'token' => JWTAuth::generateToken($payload),
+            'token' => JWTAuth::generateToken($payload, (int) env('JWT_STUDENT_TIME_TO_LIVE', 2592000)),
             'user' => $payload,
             ]);
     }

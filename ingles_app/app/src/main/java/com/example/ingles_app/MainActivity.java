@@ -19,13 +19,21 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_welcome);
 
-        //Verify if we have overlay permission
-        verifyOverlay();
+        //if there's an an active session, show the main view
+        if (new SessionManager(this).isLoggedIn()) {
+            startActivity(new Intent(this, HomeActivity.class));
+            finish();
+            return;
+        }
+
+        setContentView(R.layout.activity_welcome);
 
         Button btnGoLogin = findViewById(R.id.btnGoLogin);
         Button btnGoRegister = findViewById(R.id.btnGoRegister);
+
+        //Verify if we have overlay permission
+        //verifyOverlay();
 
         btnGoLogin.setOnClickListener(v -> {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));

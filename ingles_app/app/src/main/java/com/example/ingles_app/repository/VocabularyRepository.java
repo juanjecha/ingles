@@ -15,6 +15,10 @@ import com.example.ingles_app.api.ProgressResponse;
 import com.example.ingles_app.entities.Category;
 import com.example.ingles_app.entities.Flashcards;
 import com.example.ingles_app.entities.ProgressEntity;
+import com.example.ingles_app.entities.ShownCard;
+
+import java.time.LocalDate;
+import java.util.Random;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,8 +36,20 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
+
+public static class CategoryState {
+    public Category category;
+    public boolean unlocked;
+    public boolean passed;
+    public Integer score;
+    public int words;
+}
+
 public class VocabularyRepository {
     private static final String TAG = "SYNC";
+
+    public static final int DAILY_LIMIT = 5;
+    public static final long MIN_INTERVAL_MS = 0;
 
     //only one thread to everything
     private static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor();
@@ -93,22 +109,48 @@ public class VocabularyRepository {
 
     //Categories available to students
     // Background thread
-    public List<Category> getUnlockedCategories() {
+
+
+    public List<CategoryState> getCategoryStates() {
         VocabularyDAO dao = database.vocabularyDAO();
         Map<Integer, ProgressEntity> progress = new HashMap<>();
         for (ProgressEntity p : dao.getProgress()) {
             progress.put(p.categoryID, p);
         }
 
-        List<Category> unlocked = new ArrayList<>();
-        boolean previousPassed = true;
+        List<CategoryState> states = new ArrayList<>();
+        boolean preoviousDone = true;
         for (Category c : dao.getCategories()) {
-            if (!previousPassed) break;
-            unlocked.add(c);
             ProgressEntity p = progress.get(c.id);
-            previousPassed = p != null && p.passed;
+
+            CategoryState s = new CategoryState():
+            s.category = c;
+            s.unlocked = preoviousDone;
+            s.passed = p != null && p.passed;
+            s.score = p != null ? p.score : null;
+            s.words = dao.countFLashcards(c.id);
+            states.add(s);
+
+            preoviousDone = s.unlocked && s.passed;
         }
+        return states;
+    }
+
+    public List<Category> getUnlockedCategories() {
+        List<Category> unlocked = new ArrayList<>();
+
+        for (CategoryState s : getCategoryStates()) {
+            if (s.unlocked) unlocked.add(s.category);
+        }
+
         return unlocked;
+    }
+
+    public void clearLocalData() {
+        EXECUTOR.execute(() -> {
+            database.clearAllTables();
+            images.clear();
+        });
     }
 
     public boolean syncCategories() throws IOException {
@@ -208,5 +250,59 @@ public class VocabularyRepository {
         } catch (IOException e) {
             Log.e(TAG, "Progress: " + e.getMessage());
         }
+    }
+
+
+    public Category getActiveCategory() {
+        VocabularyDAO dao = database.vocabularyDAO();
+        Map<Integer, ProgressEntity> progress = new HashMap<>();
+        for (ProgressEntity p : dao.getProgress()) {
+            progress.put(p.categoryID, p);
+        }
+
+        for (Category c : dao.getCategories()) {
+            ProgressEntity p = progress.get(c.id);
+            if (p == null || !p.passed) return c;
+        }
+        return null;   // todas aprobadas
+    }
+
+    // Siguiente palabra nueva para mostrar, o null si hoy ya no toca. Bloqueante.
+    public Flashcards pickNextCard() {
+        VocabularyDAO dao = database.vocabularyDAO();
+
+        if (dao.countShownOn(today()) >= DAILY_LIMIT) return null;
+
+        if (MIN_INTERVAL_MS > 0) {
+            Long last = dao.getLastShownAt();
+            if (last != null && System.currentTimeMillis() - last < MIN_INTERVAL_MS) return null;
+        }
+
+        Category active = getActiveCategory();
+        if (active == null) return null;
+
+        return dao.getNextUnseen(active.id);   // null si ya vio todas: toca el test
+    }
+
+    // Una palabra cualquiera de la categoría activa, sin contar para el límite (para probar)
+    public Flashcards pickPreviewCard() {
+        Category active = getActiveCategory();
+        if (active == null) return null;
+
+        List<Flashcards> cards = database.vocabularyDAO().getFlashcardsByCat(active.id);
+        if (cards.isEmpty()) return null;
+        return cards.get(new Random().nextInt(cards.size()));
+    }
+
+    public void markShown(Flashcards card) {
+        ShownCard shown = new ShownCard();
+        shown.flashcardID = card.id;
+        shown.shownDate = today();
+        shown.shownAt = System.currentTimeMillis();
+        database.vocabularyDAO().markShown(shown);
+    }
+
+    private static String today() {
+        return LocalDate.now().toString();
     }
 }
