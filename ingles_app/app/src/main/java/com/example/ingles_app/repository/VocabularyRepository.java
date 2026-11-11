@@ -123,7 +123,7 @@ public class VocabularyRepository {
         for (Category c : dao.getCategories()) {
             ProgressEntity p = progress.get(c.id);
 
-            CategoryState s = new CategoryState():
+            CategoryState s = new CategoryState();
             s.category = c;
             s.unlocked = preoviousDone;
             s.passed = p != null && p.passed;

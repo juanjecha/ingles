@@ -88,7 +88,7 @@ public class HomeActivity extends AppCompatActivity {
         if (session != null && session.isLoggedIn() && repository != null) {
             loadCategories();
             tvPermBanner.setVisibility(
-                    PermissionsActivity.allRequiredGranted(this) ? View.GONE: View.VISIBLE;
+                    PermissionsActivity.allRequiredGranted(this) ? View.GONE: View.VISIBLE
             );
         }
     }
@@ -163,7 +163,7 @@ public class HomeActivity extends AppCompatActivity {
             return;
         }
         if(s.words == 0) {
-            Toast.makeText(this."No words yet.Tap refresh when you're online",
+            Toast.makeText(this,"No words yet.Tap refresh when you're online",
                     Toast.LENGTH_SHORT).show();
             return;
         }

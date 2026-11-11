@@ -46,7 +46,7 @@
             android:padding="8dp"
             android:text = "Log out"
             android:textColor="@color/white"
-            android:textStyle="bold"
+            android:textStyle="bold" />
     </LinearLayout>
 
     <androidx.cardview.widget.CardView
