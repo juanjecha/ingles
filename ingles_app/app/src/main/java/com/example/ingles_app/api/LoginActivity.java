@@ -15,7 +15,6 @@ import com.example.ingles_app.DB.LoginRequest;
 import com.example.ingles_app.R;
 import com.example.ingles_app.SessionManager;
 import com.example.ingles_app.repository.VocabularyRepository;
-import com.example.ingles_app.SessionManager;
 import com.example.ingles_app.HomeActivity;
 
 import retrofit2.Call;
@@ -65,7 +64,7 @@ public class LoginActivity extends AppCompatActivity {
 
                         if (response.isSuccessful() && response.body() != null) {
                             ApiResponse body = response.body();
-                            String token = body().getToken();
+                            String token = body.getToken();
                             ApiResponse.User user = body.getUser();
 
                             if (token != null && user != null) {

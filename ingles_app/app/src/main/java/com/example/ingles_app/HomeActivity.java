@@ -2,7 +2,6 @@ package com.example.ingles_app;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Insets;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,17 +16,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.core.graphics.Insets;
 
 import com.example.ingles_app.entities.Flashcards;
 import com.example.ingles_app.repository.VocabularyRepository;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class HomeActivity extends AppCompatActivity {
-    private static final String LOCAL_NETWORK = "android.permisssion.ACCESS_LOCAL_NETWORK";
+    private static final String LOCAL_NETWORK = "android.permission.ACCESS_LOCAL_NETWORK";
 
-    private final ExecutorService io = ExecutorService.newSingleThreadExecutor();
+    private final ExecutorService io = Executors.newSingleThreadExecutor();
 
     private SessionManager session;
     private VocabularyRepository repository;

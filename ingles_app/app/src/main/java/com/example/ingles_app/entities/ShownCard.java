@@ -11,7 +11,7 @@ public class ShownCard {
     public int flashcardID;
 
     @ColumnInfo(name = "shown_date")
-    public String shownData;
+    public String shownDate;
 
     @ColumnInfo(name = "shown_at")
     public long shownAt;

@@ -64,12 +64,12 @@ public interface VocabularyDAO {
 
     //Flashcards of the day
     @Query("SELECT COUNT(*) FROM shown_card WHERE shown_date = :date")
-    int countShownOn(String data);
+    int countShownOn(String date);
 
     @Query("SELECT MAX(shown_at) FROM shown_card")
     Long getLastShownAt();
 
-    @Query("SELECT * FROM flashcard WHERE category_id = :categoryID " +
+    @Query("SELECT * FROM resource WHERE category_id = :categoryID " +
             "AND id NOT IN (SELECT flashcard_id FROM shown_card) ORDER BY id ASC LIMIT 1")
     Flashcards getNextUnseen(int categoryID);
 

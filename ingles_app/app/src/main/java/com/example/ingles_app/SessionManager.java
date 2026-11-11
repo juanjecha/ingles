@@ -6,7 +6,7 @@ import android.content.SharedPreferences;
 import org.json.JSONObject;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Base64;
+import android.util.Base64;
 
 public class SessionManager {
     private static final String PREFS = "preferencias";
@@ -25,11 +25,11 @@ public class SessionManager {
     public boolean save(String token, int userId, String name) {
         int previousId = prefs.getInt(KEY_USER_ID, -1);
         prefs.edit().putString(KEY_TOKEN, token).putInt(KEY_USER_ID, userId)
-                .putString(KEY_USER_NAME).apply();
+                .putString(KEY_USER_NAME, name).apply();
         return previousId != userId;
     }
 
-    public String getKeyToken() {
+    public String getToken() {
         return prefs.getString(KEY_TOKEN, null);
     }
 
@@ -41,7 +41,7 @@ public class SessionManager {
         prefs.edit().remove(KEY_TOKEN).apply();
     }
 
-    public void isLoggedIn() {
+    public boolean isLoggedIn() {
         return getTokenExpiry(getToken()) > System.currentTimeMillis();
     }
 

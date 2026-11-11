@@ -36,15 +36,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-
-public static class CategoryState {
-    public Category category;
-    public boolean unlocked;
-    public boolean passed;
-    public Integer score;
-    public int words;
-}
-
 public class VocabularyRepository {
     private static final String TAG = "SYNC";
 
@@ -62,6 +53,14 @@ public class VocabularyRepository {
         void onFinished(boolean success);
     }
 
+    public static class CategoryState {
+        public Category category;
+        public boolean unlocked;
+        public boolean passed;
+        public Integer score;
+        public int words;
+    }
+
     public VocabularyRepository(Context context) {
         Context app = context.getApplicationContext();
         database = AppDatabase.getINSTANCE(app);
@@ -77,6 +76,7 @@ public class VocabularyRepository {
                 ok = syncCategories();
                 if (ok) {
                     pushPendingProgress();
+                    pullProgress();
                     syncFlashcards();
                 }
             } catch (Exception e) {
