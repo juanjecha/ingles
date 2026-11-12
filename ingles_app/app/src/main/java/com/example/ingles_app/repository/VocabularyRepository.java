@@ -271,7 +271,11 @@ public class VocabularyRepository {
     public Flashcards pickNextCard() {
         VocabularyDAO dao = database.vocabularyDAO();
 
-        if (dao.countShownOn(today()) >= DAILY_LIMIT) return null;
+        int shownToday = dao.countShownOn(today());
+        if (shownToday >= DAILY_LIMIT) {
+            Log.d("CARDS", "Daily limit reached (" + shownToday + ")");
+            return null;
+        }
 
         if (MIN_INTERVAL_MS > 0) {
             Long last = dao.getLastShownAt();
@@ -279,9 +283,17 @@ public class VocabularyRepository {
         }
 
         Category active = getActiveCategory();
-        if (active == null) return null;
+        if (active == null) {
+            Log.d("CARDS", "No active category (nothing synced, or all categories passed)");
+            return null;
+        }
 
-        return dao.getNextUnseen(active.id);   // null si ya vio todas: toca el test
+        Flashcards card = dao.getNextUnseen(active.id);
+        if (card == null) {
+            Log.d("CARDS", "No unseen words in '" + active.name + "' ("
+                    + dao.getFlashcardsByCat(active.id).size() + " saved on the phone)");
+        }
+        return card;
     }
 
     // Una palabra cualquiera de la categoría activa, sin contar para el límite (para probar)

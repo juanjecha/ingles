@@ -65,6 +65,7 @@ public class FlashcardOverlayService extends Service {
     private final BroadcastReceiver screenReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            Log.d(TAG, "Event received: " + intent.getAction());
             showNextCard(false);
         }
     };
@@ -113,6 +114,9 @@ public class FlashcardOverlayService extends Service {
                 TRIGGER_ON_UNLOCK ? Intent.ACTION_USER_PRESENT : Intent.ACTION_SCREEN_ON);
         ContextCompat.registerReceiver(this, screenReceiver, filter,
                 ContextCompat.RECEIVER_NOT_EXPORTED);
+
+        Log.d(TAG, "Service created, listening for "
+                + (TRIGGER_ON_UNLOCK ? "USER_PRESENT" : "SCREEN_ON"));
     }
 
     @Override
@@ -147,7 +151,10 @@ public class FlashcardOverlayService extends Service {
     // ---------- Flashcard ----------
 
     private void showNextCard(boolean preview) {
-        if (floatingView != null) return;   // ya hay una tarjeta en pantalla
+        if (floatingView != null) {
+            Log.d(TAG, "A card is already on screen");
+            return;
+        }
 
         if (!Settings.canDrawOverlays(this)) {
             Log.w(TAG, "Missing 'Show over other apps' permission");
