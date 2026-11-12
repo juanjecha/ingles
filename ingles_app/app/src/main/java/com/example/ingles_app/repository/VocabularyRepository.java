@@ -286,12 +286,22 @@ public class VocabularyRepository {
 
     // Una palabra cualquiera de la categoría activa, sin contar para el límite (para probar)
     public Flashcards pickPreviewCard() {
-        Category active = getActiveCategory();
-        if (active == null) return null;
+        VocabularyDAO dao = database.vocabularyDAO();
 
-        List<Flashcards> cards = database.vocabularyDAO().getFlashcardsByCat(active.id);
-        if (cards.isEmpty()) return null;
-        return cards.get(new Random().nextInt(cards.size()));
+        List<Flashcards> pool = new ArrayList<>();
+        Category active = getActiveCategory();
+        if (active != null) {
+            pool = dao.getFlashcardsByCat(active.id);
+        }
+
+        if (pool.isEmpty()) {
+            for (Category c : dao.getCategories()) {
+                pool.addAll(dao.getFlashcardsByCat(c.id));
+            }
+        }
+
+        if (pool.isEmpty()) return null;
+        return pool.get(new Random().nextInt(pool.size()));
     }
 
     public void markShown(Flashcards card) {

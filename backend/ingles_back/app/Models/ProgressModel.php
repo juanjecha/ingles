@@ -11,7 +11,7 @@ class ProgressModel extends Model {
     protected $returnType = 'array';
 
     public function getAll($user) {
-        return $this->select('category_id passed, score')
+        return $this->select('category_id, passed, score')
                      ->where('student_id', (int) $user->id)
                      ->findAll();
     }

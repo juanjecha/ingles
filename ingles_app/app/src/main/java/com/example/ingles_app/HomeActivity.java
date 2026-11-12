@@ -55,6 +55,8 @@ public class HomeActivity extends AppCompatActivity {
             return insets;
         });
 
+        repository = new VocabularyRepository(getApplicationContext());
+
         TextView tvGreeting = findViewById(R.id.tvGreeting);
         categoryList = findViewById(R.id.categoryList);
         tvEmpty = findViewById(R.id.tvEmpty);
@@ -75,6 +77,9 @@ public class HomeActivity extends AppCompatActivity {
             FlashcardOverlayService.stop(getApplicationContext());
             goToWelcome(null);
         });
+
+        findViewById(R.id.btnSetup).setOnClickListener(v ->
+                startActivity(new Intent(this, PermissionsActivity.class)));
 
         if (needsLocalNetworkPermission()) {
             requestPermissions(new String[]{LOCAL_NETWORK}, 100);
@@ -134,7 +139,7 @@ public class HomeActivity extends AppCompatActivity {
             View item = inflater.inflate(R.layout.item_category, categoryList, false);
 
             TextView name = item.findViewById(R.id.tvCategoryName);
-            TextView info = item.findViewById(R.id.tvCategoryName);
+            TextView info = item.findViewById(R.id.tvCategoryInfo);
             TextView status = item.findViewById(R.id.tvCategoryStatus);
 
             name.setText(capitalize(s.category.name));
