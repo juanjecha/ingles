@@ -29,15 +29,20 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
+import com.example.ingles_app.entities.Category;
 import com.example.ingles_app.entities.Flashcards;
 import com.example.ingles_app.repository.ImageStore;
 import com.example.ingles_app.repository.VocabularyRepository;
 
 import java.io.File;
+import java.time.LocalDate;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class FlashcardOverlayService extends Service {
+    private static final String TEST_CHANNEL_ID = "test_ready";
+    private static final int TEST_NOTIFICATION_ID = 1002;
+
     private static final String TAG = "CARDS";
 
     public static final String ACTION_PREVIEW = "com.example.ingles_app.PREVIEW_CARD";
@@ -49,7 +54,7 @@ public class FlashcardOverlayService extends Service {
 
     // it switches depending on the state of the screen
     //turned on -> true , turned off -> false
-    private static final boolean TRIGGER_ON_UNLOCK = true;
+    private static final boolean TRIGGER_ON_UNLOCK = false;
 
     private static final String PREFS = "FlashcardServicePrefs";
     private static final String KEY_ENABLED = "enabled";
@@ -113,10 +118,12 @@ public class FlashcardOverlayService extends Service {
         IntentFilter filter = new IntentFilter(
                 TRIGGER_ON_UNLOCK ? Intent.ACTION_USER_PRESENT : Intent.ACTION_SCREEN_ON);
         ContextCompat.registerReceiver(this, screenReceiver, filter,
-                ContextCompat.RECEIVER_NOT_EXPORTED);
+                ContextCompat.RECEIVER_EXPORTED);
 
         Log.d(TAG, "Service created, listening for "
                 + (TRIGGER_ON_UNLOCK ? "USER_PRESENT" : "SCREEN_ON"));
+
+        ContextCompat.registerReceiver(this, screenReceiver, filter, ContextCompat.RECEIVER_EXPORTED);
     }
 
     @Override
@@ -165,16 +172,51 @@ public class FlashcardOverlayService extends Service {
             Flashcards card = preview ? repository.pickPreviewCard() : repository.pickNextCard();
             if (card == null) {
                 Log.d(TAG, "No card to show right now");
+                if(!preview) notifyTest();
                 return;
             }
 
             mainHandler.post(() -> {
                 // Solo cuenta como "mostrada" si de verdad se dibujó
                 if (drawCard(card) && !preview) {
-                    io.execute(() -> repository.markShown(card));
+                    io.execute(() -> {
+                        repository.markShown(card);
+                        notifyTest();
+                    });
                 }
             });
         });
+    }
+
+    private void notifyTest() {
+        Category category = repository.getTestReadyCategory();
+        if (category == null) return;
+
+        SharedPreferences prefs = getSharedPreferences(PREFS, Context.MODE_PRIVATE);
+        String key = "test_notified_" + category.id;
+        String today = LocalDate.now().toString();
+        if(today.equals(prefs.getString(key, ""))) return;
+        prefs.edit().putString(key, today).apply();
+
+        Intent intent = new Intent(this, TestActivity.class)
+                .putExtra(TestActivity.EXTRA_CATEGORY_ID, category.id)
+                .putExtra(TestActivity.EXTRA_CATEGORY_NAME, category.name)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent open = PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+
+        NotificationManager manager = getSystemService(NotificationManager.class);
+        manager.createNotificationChannel(new NotificationChannel(
+                TEST_CHANNEL_ID, "Tests", NotificationManager.IMPORTANCE_DEFAULT));
+
+        String name = category.name.substring(0,1).toUpperCase() + category.name.substring(1);
+        Notification notification = new NotificationCompat.Builder(this, TEST_CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_notification)
+                .setContentTitle("Test ready: " + name)
+                .setContentText("You've seen every word. Do the test to unlock the next category")
+                .setContentIntent(open)
+                .setAutoCancel(true)
+                .build();
+        manager.notify(TEST_NOTIFICATION_ID, notification);
     }
 
     private boolean drawCard(Flashcards card) {

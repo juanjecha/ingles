@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -145,6 +146,8 @@ public class HomeActivity extends AppCompatActivity {
             name.setText(capitalize(s.category.name));
             info.setText(s.category.difficulty + " . " + s.words + (s.words == 1 ? " word" : " words"));
 
+            Button btnTest = item.findViewById(R.id.btnTakeTest);
+
             if(!s.unlocked) {
                 status.setText("Locked");
                 status.setTextColor(ContextCompat.getColor(this, R.color.text_secondary));
@@ -152,14 +155,27 @@ public class HomeActivity extends AppCompatActivity {
             } else if (s.passed) {
                 status.setText("Completed");
                 status.setTextColor(ContextCompat.getColor(this, R.color.primary_green));
+            } else if (s.testReady){
+                status.setText("Test ready");
+                status.setTextColor(ContextCompat.getColor(this, R.color.accent_orange));
             } else {
                 status.setText("Available");
                 status.setTextColor(ContextCompat.getColor(this, R.color.accent_orange));
             }
 
+            btnTest.setVisibility(s.testReady ? View.VISIBLE : View.GONE);
+            btnTest.setOnClickListener(v -> openTest(s));
+
             item.setOnClickListener(v -> openCategory(s));
             categoryList.addView(item);
         }
+    }
+
+    private void openTest(VocabularyRepository.CategoryState s) {
+        Intent intent = new Intent(this, TestActivity.class);
+        intent.putExtra(TestActivity.EXTRA_CATEGORY_ID, s.category.id);
+        intent.putExtra(TestActivity.EXTRA_CATEGORY_NAME, s.category.name);
+        startActivity(intent);
     }
 
     private void openCategory(VocabularyRepository.CategoryState s) {

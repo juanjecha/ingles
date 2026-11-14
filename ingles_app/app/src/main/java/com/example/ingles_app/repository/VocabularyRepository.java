@@ -59,6 +59,7 @@ public class VocabularyRepository {
         public boolean passed;
         public Integer score;
         public int words;
+        public boolean testReady;
     }
 
     public VocabularyRepository(Context context) {
@@ -129,6 +130,7 @@ public class VocabularyRepository {
             s.passed = p != null && p.passed;
             s.score = p != null ? p.score : null;
             s.words = dao.countFLashcards(c.id);
+            s.testReady = s.unlocked && !s.passed && s.words > 0 && dao.countUnseen(c.id) == 0;
             states.add(s);
 
             preoviousDone = s.unlocked && s.passed;
@@ -265,6 +267,26 @@ public class VocabularyRepository {
             if (p == null || !p.passed) return c;
         }
         return null;   // todas aprobadas
+    }
+
+    //to know the category that has a test to the user (when the user saw the 5 words)
+    public Category getTestReadyCategory() {
+        Category active = getActiveCategory();
+        if (active == null) return null;
+
+        VocabularyDAO dao = database.vocabularyDAO();
+        boolean ready = dao.countFLashcards(active.id) > 0 && dao.countUnseen(active.id) == 0;
+        return ready ? active : null;
+    }
+
+    // It shows the next category with flashcards to be seen
+    public Category getNextCategory(int categoryID) {
+        boolean found = false;
+        for (Category c : database.vocabularyDAO().getCategories()) {
+            if (found) return c;
+            if (c.id == categoryID) found = true;
+        }
+        return null;
     }
 
     // Siguiente palabra nueva para mostrar, o null si hoy ya no toca. Bloqueante.

@@ -75,4 +75,11 @@ public interface VocabularyDAO {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void markShown(ShownCard shown);
+
+    @Query("SELECT COUNT(*) FROM resource WHERE category_id = :categoryID " +
+    "AND id NOT IN (SELECT flashcard_id FROM shown_card)")
+    int countUnseen(int categoryID);
+
+    @Query("SELECT * FROM resource")
+    List<Flashcards> getAllFlashcards();
 }

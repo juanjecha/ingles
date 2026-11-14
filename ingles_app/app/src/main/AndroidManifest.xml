@@ -66,6 +66,9 @@
         <activity
             android:name=".PermissionsActivity"
             android:exported="false" />
+        <activity
+            android:name=".TestActivity"
+            android:exported="false"/>
     </application>
 
 </manifest>
