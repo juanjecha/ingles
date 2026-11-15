@@ -5,17 +5,21 @@ namespace App\Controllers\Api;
 use App\Libraries\JWTAuth;
 use App\Models\CategoryModel;
 use App\Models\ProgressModel;
+use App\Models\LevelModel;
 use CodeIgniter\RESTful\ResourceController;
 
 class ProgressController extends ResourceController {
     protected $format = 'json';
     protected $progressModel;
     protected $categoryModel;
+    protected $levelModel;
+
 
     public function __construct()
     {
         $this->progressModel = new ProgressModel();
         $this->categoryModel = new CategoryModel();
+        $this->levelModel = new LevelModel();
     }
 
     //student's score
@@ -54,6 +58,10 @@ class ProgressController extends ResourceController {
         $category = $categories->where('id', $categoryId)->where('status', 1)->first();
         if (!$category) {
             return $this->failNotFound("That category doesn't exist");
+        }
+
+        if ($category['difficulty'] !== $this->levelModel->levelOf((int) $user->id)){
+            return $this->failForbidden("That category is not available for your level");
         }
 
         $model = $this->progressModel;

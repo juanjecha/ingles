@@ -14,15 +14,17 @@ class CategoryModel extends Model {
         return $this->select('*')->orderBy('name')->findAll();
     }
 
-    public function published(): array {
+    public function publishedForLevel(string $level): array {
         return $this->select('id, name, difficulty, ord')
         ->where('status', 1)
+        ->where('difficulty', $level)
         ->orderBy('ord', 'ASC')
         ->findAll();
     }
 
     public function next(array $category) {
         return $this->where('status', 1)
+                    ->where('difficulty', $category['difficulty'])
                     ->where('ord >', (int) $category['ord'])
                     ->orderBy('ord', 'ASC')
                     ->first();

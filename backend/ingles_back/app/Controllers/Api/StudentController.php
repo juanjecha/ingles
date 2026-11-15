@@ -6,11 +6,51 @@ use CodeIgniter\RESTful\ResourceController;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use App\Models\StudentModel;
+use App\Models\LevelModel;
 use App\Libraries\JWTAuth;
 
 class StudentController extends ResourceController
 {
     protected $format = 'json';
+    protected $student;
+    protected $level;
+
+    public function __construct() {
+        $this->student = new StudentModel();
+        $this->level = new LevelModel();
+    }
+
+    public function newStudentLevel($id = null) {
+        $user = JWTAuth::$currentUser;
+        if (($user->rol ?? '') !== 'teacher'){
+            return $this->failForbidden("Only teacher can change students' level");
+        }
+
+        $studentID = (int) $id;
+        $student = $this->student->find($studentID);
+        if(!$student) {
+            return $this->failForbidden('Student not found');
+        }
+
+        $levels = $this->level;
+        $row = $levels->where('student_id', $studentID)->first();
+        $next = LevelModel::nextLevel($row['level'] ?? 'A1');
+        if ($next === null) {
+            return $this->fail('The student is already at the highest level (C1)', 409);
+        }
+
+        if($row){
+            $levels->update($row['id'], ['level' => $next]);
+        } else {
+            $levels->insert([
+                'student_id' => $studentID,
+                'enrollment' => $student['enrollment'],
+                'level' => $next,
+            ]);
+        }
+
+        return $this->respond(['status' => 200, 'message' => 'Level updated', 'level' => $next]);
+    }
 
     public function login_student() {
 
@@ -21,7 +61,7 @@ class StudentController extends ResourceController
         if ($enrollment === '' || $password === '') {
             return $this->failValidationErrors('Matrícula y contraseña son obligatorias');
         }
-        $model = new StudentModel();
+        $model = $this->student;
         $student = $model->where('enrollment', $enrollment)->first();
 
         //validate data introduced by the user in database
@@ -51,6 +91,6 @@ class StudentController extends ResourceController
             return $this->failForbidden("Only teachers can see this view");
         }
 
-        return $this->respond((new StudentModel())->show_students());
+        return $this->respond($this->student->show_students());
     }
 }

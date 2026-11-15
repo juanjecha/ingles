@@ -223,6 +223,11 @@ public class VocabularyRepository {
                     Log.d(TAG, "Progressed on  category number " + p.categoryID + ": HTTP " + res.code());
                 } else {
                     Log.e(TAG, "Progress of category " + p.categoryID + " rejected: HTTP " + res.code());
+
+                    if (res.code() == 403 || res.code() == 404) {
+                        p.pendingSync = false;
+                        dao.saveProgress(p);
+                    }
                 }
             } catch (IOException e) {
                 Log.e(TAG, "No internet");

@@ -15,27 +15,28 @@ class StudentModel extends Model {
         "course",
         "password",
         "hash",
-        "id_student_level"
     ];
     protected $returnType = 'array';
 
-    public function verify($student = null) {
-        $answer = true;
-        $stmodel = new StudentModel();
-        $res = $stmodel->where("enrollment", $student["enrollment"])
-                       ->where("password", $student["password"])
-                       ->first();
-        if(!$res) {
-            $answer = false;
-        }
-        return $answer;
-    }
+    public function createWithLevel(array $data) {
+        $this->db->transBegin();
 
-    public function connect($data = null) {
-        $res = $this->where('enrollment' ,$data['enrollment'])->get()->getRows();
-        if ($res && password_verify($data["password"], $res["password"])) {
-            return true;
-        } else return false;
+        try {
+            $studentId = $this->insert($data);
+
+            $this->db->table('student_level')->insert([
+                'student_id' => $studentId,
+                'enrollment' => $data['enrollment'],
+                'level' => 'A1'
+            ]);
+
+            $this->db->transCommit();
+            return (int) $studentId;
+        } catch (\Throwable $e){
+            $this->db->transRollback();
+            log_message('error', 'createWithLevel: ' . $e->getMessage());
+            return false;
+        }
     }
 
     public function show_students(): array {

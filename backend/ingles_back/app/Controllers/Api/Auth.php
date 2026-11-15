@@ -19,7 +19,7 @@ class Auth extends ResourceController
     public function login_teacher()
     {
         $json = $this->request->getJSON(true) ?? [];
-        $key = strtolower(trim($json['teacher_key'] ?? ''));
+        $key = strtoupper(trim($json['teacher_key'] ?? ''));
         $password = $json['password'] ?? '';
  
         if ($key === '' || $password === '') {
@@ -48,24 +48,6 @@ class Auth extends ResourceController
             'token'   => $token,
             'user'    => $payload
         ]);
-    }
-
-    public function login_student() {
-        $student = $this->request->getJson(true);
-        log_message("debug",print_r($student, true));
-        $pass = $student["password"];
-        $stModel = new StudentModel();
-        $var = $stModel->verify();
-        if($var) {
-            $key = $pass;
-            $payload= [
-                "uid" => 1,
-                "user"=>"student",
-                "exp"=>time()+3600
-            ];
-        }
-        return $this->response->setStatusCode(401)
-        ->setJSON(["error"=> "Credenciales no válidas"]);
     }
 
     public function register_teacher() {
@@ -101,8 +83,8 @@ class Auth extends ResourceController
         $name = trim($json['name'] ?? '');
         $enrollment = trim($json['enrollment'] ?? '');
         $email = strtolower(trim($json['email'] ?? ''));
-        $course = trim($json['course']);
-        $password = $json['password'];
+        $course = trim($json['course']) ?? '';
+        $password = $json['password'] ?? '';
 
         if ($name === '' || $enrollment === '' || $email === '' || $course === '' || $password === '') {
             return $this->failValidationErrors("Todos los campos son obligatorios");
@@ -133,11 +115,15 @@ class Auth extends ResourceController
             'password' => $password,
             'hash' => password_hash($password,PASSWORD_DEFAULT),
         ]);
+        if (!$id) {
+            return $this->fail("The account could not be created", 500);
+        }
 
         $payload = [
             'id' => (int) $id,
             'name' => $name,
             'enrollment' => $enrollment,
+            'level' => 'A1'
         ];
 
         return $this->respondCreated([

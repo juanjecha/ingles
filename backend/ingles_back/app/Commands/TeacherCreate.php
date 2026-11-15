@@ -40,7 +40,11 @@ class TeacherCreate extends BaseCommand {
             return EXIT_ERROR;
         }
 
-        $email = CLI::prompt('Institutional email', null, 'required');
+        $email = strtolower(CLI::prompt('Institutional email', null, 'required|valid_email'));
+        if ($model->where('email',$email)->first()) {
+            CLI::error ("A teacher with email {email} already exists");
+            return EXIT_ERROR;
+        }
 
         $model->insert([
             'teacher_key' => $key,

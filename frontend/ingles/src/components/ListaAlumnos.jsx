@@ -1,6 +1,13 @@
 import React, {useEffect, useState} from 'react'
 import api from '../api/axiosConfig'
 
+const LEVELS = ['A1', 'A2', 'B1', 'B2', 'C1']
+
+const nextLevel = (level) => {
+  const i = LEVELS.indexOf(level)
+  return i >= 0 && i < LEVELS.length -1 ? LEVELS[i +1] :null
+}
+
 export default function ListaAlumnos({ datos }) {
   const [students, setStudents] = useState([])
   const [loading, setLoading] = useState(true)
@@ -14,6 +21,22 @@ export default function ListaAlumnos({ datos }) {
     }).finally(() => setLoading(false))
 
   }, [])
+
+  const newStudentLevel = async (student) => {
+    const current = student.level ?? 'A1'
+    const next = nextLevel(current)
+    if (!next)return
+    if (!window.confirm('Promote ${student.name} from ${current} to ${next}?')) return
+  }
+
+  try {
+    const res = await api.post('students/${student.id}/newStudentLevel')
+      setStudents((prev) => prev.map((s) =>
+        s.id === student.id ? { ...s, level: res.data.level } : s
+      ))
+  } catch (err) {
+    alert(err.response?.data?.messages?.error || 'The level could not be updated')
+  }
 
   if (loading) return <p>Loading...</p>
   if (error) return <p>{error}</p>
@@ -39,15 +62,30 @@ export default function ListaAlumnos({ datos }) {
             </thead>
 
             <tbody>
-              {students.map((s) => (
-                <tr key={s.id}>
+              {students.map((s) => {
+                const level = s.level ?? 'A1'
+                const next = nextLevel(level)
+                return (
+                  <tr key={s.id}>
                   <td>{s.enrollment}</td>
                   <td>{s.name}</td>
                   <td>{s.email}</td>
                   <td>{s.course}</td>
-                  <td>{s.level ?? <span className='text-muted'>Not given</span>}</td>
+                  <td>{level}</td>
+
+                  <td>
+                    {next ? (
+                      <button className='btn btn-sm btn-outline-success onClick={() => newStudentLevel}'>
+                        <i className='bi bi-arrow-up-circle me-1'></i> Promote to {next}
+                      </button>
+                    ) : (
+                      <span className='text-muted'> Highest Level</span>
+                    )}
+                  </td>
                 </tr>
-              ))}
+                )
+              })
+              }
             </tbody>
 
           </table>
