@@ -24,7 +24,7 @@ export default function App() {
   const location = useLocation();
   const navigate = useNavigate();
   const esLogin = location.pathname === '/';
-  const user = getUser;
+  const user = getUser();
 
   useEffect(() => {
     if (esLogin) return;
@@ -84,9 +84,9 @@ export default function App() {
         </div>
 
         <div className="d-flex align-items-center gap-3">
-          {user.email && (
+          {user.name && (
             <span className="navbar-text text-white-50 small">
-              <i className="bi bi-person-circle me-1"></i>{user.email}
+              <i className="bi bi-person-circle me-1"></i>{user.name}
             </span>
           )}
           <button type="button" className="btn btn-outline-light btn-sm" onClick={handleLogout}>

@@ -15,7 +15,7 @@ public class ProgressRequest {
     @SerializedName("score")
     public Integer score;
 
-    public ProgressRequest(int userID, boolean passed, Integer score) {
+    public ProgressRequest(int categoryID, boolean passed, Integer score) {
         //this.userID = userID;
         this.categoryID = categoryID;
         this.passed = passed ? 1 : 0;

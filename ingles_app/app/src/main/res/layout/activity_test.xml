@@ -17,19 +17,9 @@
             app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
-                    android:id="@+id/btnQuit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="8dp"
-                    android:text=" Exit"
-                    android:textColor="@color/white"
-                    android:textStyle="bold" />
-
-                <TextView
                     android:id="@+id/tvTestTitle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
                     android:layout_weight="1"
                     android:textColor="@color/white"
                     android:textSize="22sp"
@@ -62,6 +52,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="What does this word mean?"
+                        android:textColor="@color/text_secondary"
                         android:textSize="14sp"/>
 
                     <com.google.android.material.card.MaterialCardView
@@ -69,6 +60,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
                         android:layout_marginBottom="24dp"
+                        app:cardBackgroundColor="@color/bg_input"
+                        app:cardCornerRadius="24dp"
                         app:cardElevation="0dp"
                         app:strokeColor="@color/border_input"
                         app:strokeWidth="1dp">

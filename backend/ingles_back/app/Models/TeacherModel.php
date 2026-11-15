@@ -8,22 +8,11 @@ class TeacherModel extends Model {
 
     protected $primaryKey = 'id';
     protected $allowedFields = [
+        "teacher_key",
         "name",
         "email",
         "password",
         "hash"
     ];
     protected $returnType = 'array';
-
-    public function verify($student = null) {
-        $answer = true;
-        $stmodel = new StudentModel();
-        $res = $stmodel->where("enrollment", $student["enrollment"])
-                       ->where("password", $student["password"])
-                       ->first();
-        if(!$res) {
-            $answer = false;
-        }
-        return $answer;
-    }
 }

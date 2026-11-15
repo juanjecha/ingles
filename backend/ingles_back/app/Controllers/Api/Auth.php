@@ -19,19 +19,24 @@ class Auth extends ResourceController
     public function login_teacher()
     {
         $json = $this->request->getJSON(true) ?? [];
-        $email = strtolower(trim($json['email'] ?? ''));
+        $key = strtolower(trim($json['teacher_key'] ?? ''));
         $password = $json['password'] ?? '';
  
-        $userModel = new TeacherModel();
-        $user = $userModel->where('email', $email)->first();
+        if ($key === '' || $password === '') {
+            return $this->failValidationErrors("Your key and password are both needed");
+        }
+
+        $model = new TeacherModel();
+        $user = $model->where('teacher_key', $key)->first();
  
         if (!$user || !password_verify($password, $user['hash'])) {
-            return $this->failUnauthorized('Credenciales incorrectas.');
+            return $this->failUnauthorized('Your credentiales are incorrect');
         }
 
         $payload = [
             'id'    => $user['id'],
-            'email' => $user['email'],
+            'name' => $user['name'],
+            'teacher_key' => $user['teacher_key'],
             'rol' => 'teacher',
         ];
 
@@ -39,7 +44,7 @@ class Auth extends ResourceController
  
         return $this->respond([
             'status'  => 200,
-            'message' => 'Login exitoso',
+            'message' => 'Logged in succesfully',
             'token'   => $token,
             'user'    => $payload
         ]);

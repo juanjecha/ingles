@@ -221,6 +221,8 @@ public class VocabularyRepository {
                     p.pendingSync = false;
                     dao.saveProgress(p);
                     Log.d(TAG, "Progressed on  category number " + p.categoryID + ": HTTP " + res.code());
+                } else {
+                    Log.e(TAG, "Progress of category " + p.categoryID + " rejected: HTTP " + res.code());
                 }
             } catch (IOException e) {
                 Log.e(TAG, "No internet");
