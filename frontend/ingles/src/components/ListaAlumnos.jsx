@@ -27,17 +27,17 @@ export default function ListaAlumnos({ datos }) {
     const next = nextLevel(current)
     if (!next)return
     if (!window.confirm('Promote ${student.name} from ${current} to ${next}?')) return
-  }
+  
 
-  try {
-    const res = await api.post('students/${student.id}/newStudentLevel')
-      setStudents((prev) => prev.map((s) =>
-        s.id === student.id ? { ...s, level: res.data.level } : s
-      ))
-  } catch (err) {
-    alert(err.response?.data?.messages?.error || 'The level could not be updated')
+    try {
+      const res = await api.post('students/${student.id}/newStudentLevel')
+        setStudents((prev) => prev.map((s) =>
+          s.id === student.id ? { ...s, level: res.data.level } : s
+        ))
+    } catch (err) {
+      alert(err.response?.data?.messages?.error || 'The level could not be updated')
+    }
   }
-
   if (loading) return <p>Loading...</p>
   if (error) return <p>{error}</p>
 

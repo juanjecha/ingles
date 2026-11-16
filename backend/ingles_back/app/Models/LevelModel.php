@@ -1,4 +1,4 @@
-<?
+<?php
 
 namespace App\Models;
 
@@ -15,5 +15,10 @@ class LevelModel extends Model {
     public static function nextLevel(string $level): ?string {
         $i = array_search($level, self::LEVELS, true);
         return ($i === false || $i >= count(self::LEVELS) -1) ? null : self::LEVELS[$i + 1]; 
+    }
+
+    public function levelOf(int $studentId): string {
+        $row = $this->select('level')->where('student_id', $studentId)->first();
+        return $row['level'] ?? 'A1';
     }
 }

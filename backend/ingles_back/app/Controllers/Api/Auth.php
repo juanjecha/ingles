@@ -107,7 +107,7 @@ class Auth extends ResourceController
             return $this->fail("Ese correo ya está registrado",409);
         }
 
-        $id = $model->insert([
+        $id = $model->createWithLevel([
             'name' => $name,
             'enrollment' => $enrollment,
             'email' => $email,
