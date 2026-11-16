@@ -26,11 +26,11 @@ export default function ListaAlumnos({ datos }) {
     const current = student.level ?? 'A1'
     const next = nextLevel(current)
     if (!next)return
-    if (!window.confirm('Promote ${student.name} from ${current} to ${next}?')) return
+    if (!window.confirm(`Promote ${student.name} from ${current} to ${next}?`)) return
   
 
     try {
-      const res = await api.post('students/${student.id}/newStudentLevel')
+        const res = await api.post(`students/${student.id}/promote`)
         setStudents((prev) => prev.map((s) =>
           s.id === student.id ? { ...s, level: res.data.level } : s
         ))
@@ -58,6 +58,7 @@ export default function ListaAlumnos({ datos }) {
                 <th>Email</th>
                 <th>Course</th>
                 <th>Level</th>
+                <th>Promotion</th>
               </tr>
             </thead>
 
@@ -75,7 +76,7 @@ export default function ListaAlumnos({ datos }) {
 
                   <td>
                     {next ? (
-                      <button className='btn btn-sm btn-outline-success onClick={() => newStudentLevel}'>
+                      <button className='btn btn-sm btn-outline-success' onClick={() => newStudentLevel}>
                         <i className='bi bi-arrow-up-circle me-1'></i> Promote to {next}
                       </button>
                     ) : (
