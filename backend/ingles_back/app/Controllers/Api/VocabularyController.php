@@ -6,18 +6,21 @@ use App\Libraries\JWTAuth;
 use App\Models\MaterialModel;
 use App\Models\CategoryModel;
 use App\Models\LevelModel;
+use App\Models\AssignmentModel;
 
 class VocabularyController extends ResourceController {
     protected $format = 'json';
     protected $categoryModel;
     protected $flashcardModel;
     protected $levelModel;
+    protected $assignModel;
     
     public function __construct()
     {
         $this->categoryModel = new CategoryModel();
         $this->flashcardModel = new MaterialModel();
         $this->levelModel = new LevelModel();
+        $this->assignModel = new AssignmentModel();
     }
 
     private function studentLevel(): ?string {
@@ -35,11 +38,14 @@ class VocabularyController extends ResourceController {
             return $this->failForbidden('Only students can see this content');
         }
 
+        $assigned = $this->assignModel->assignedIds((int) JWTAuth::$currentUser->id);
+
         $data = array_map(static fn ($c) => [
             'id' => (int) $c['id'],
             'name' => $c['name'],
             'difficulty' => $c['difficulty'],
             'ord' => (int) $c['ord'],
+            'assigned' => in_array((int) $c['id'], $assigned, true),
         ], $this->categoryModel->publishedForLevel($level));
         //$categories = $this->categoryModel->findAll();
         return $this->respond([
@@ -67,6 +73,10 @@ class VocabularyController extends ResourceController {
 
         if (!$category) {
             return $this->failForbidden('That category is not available for your level');
+        }
+
+        if (!$this->assignModel->isAssigned((int) JWTAuth::$currentUser->id, $categoryID)) {
+            return $this->failForbidden("Your teacher has not assigned this category yet");
         }
 
         $data = array_map(static fn ($f) => [

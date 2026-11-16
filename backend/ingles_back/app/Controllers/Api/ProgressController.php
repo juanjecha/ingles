@@ -6,6 +6,7 @@ use App\Libraries\JWTAuth;
 use App\Models\CategoryModel;
 use App\Models\ProgressModel;
 use App\Models\LevelModel;
+use App\Models\AssignmentModel;
 use CodeIgniter\RESTful\ResourceController;
 
 class ProgressController extends ResourceController {
@@ -13,13 +14,14 @@ class ProgressController extends ResourceController {
     protected $progressModel;
     protected $categoryModel;
     protected $levelModel;
-
+    protected $assignModel;
 
     public function __construct()
     {
         $this->progressModel = new ProgressModel();
         $this->categoryModel = new CategoryModel();
         $this->levelModel = new LevelModel();
+        $this->assignModel = new AssignmentModel();
     }
 
     //student's score
@@ -62,6 +64,10 @@ class ProgressController extends ResourceController {
 
         if ($category['difficulty'] !== $this->levelModel->levelOf((int) $user->id)){
             return $this->failForbidden("That category is not available for your level");
+        }
+
+        if (!$this->assignModel->isAssigned((int) $user->id, $categoryId)) {
+            return $this->failForbidden("Your teacher has not assigned this category yet");
         }
 
         $model = $this->progressModel;

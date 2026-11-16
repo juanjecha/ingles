@@ -219,12 +219,13 @@ public class TestActivity extends AppCompatActivity {
         AlertDialog.Builder dialog = new AlertDialog.Builder(this).setCancelable(false);
 
         if (passed) {
-            message.append(next != null ? "\n\n New category Unlocked: " + capitalize(next.name) + "."
-                    : "\n\n You've Completed every category");
-            dialog.setTitle("Test passed!").setMessage(message).setPositiveButton("Back to home", (d,w) -> finish());
+            message.append("\n\n Greate Job! Your teacher can now assign you your new category");
+            dialog.setTitle("Test passed!").setMessage(message).setPositiveButton(
+                    "Back to home", (d,w) -> finish());
         } else {
             message.append("\n\n You need at least " + needed + "to pass.");
-            dialog.setTitle("not yet").setMessage(message).setPositiveButton("Try again", (d,w) ->loadQuestions())
+            dialog.setTitle("not yet").setMessage(message).setPositiveButton(
+                    "Try again", (d,w) ->loadQuestions())
                     .setNegativeButton("Back to home", (d,w) ->finish());
         }
         dialog.show();

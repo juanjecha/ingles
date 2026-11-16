@@ -11,6 +11,7 @@ public class Category {
     public String name;
     public String difficulty;
     public int ord;
+    public boolean assigned;
     //@ColumnInfo(name = "blocked_by_default")
     //public boolean blockedByDefault;
 }

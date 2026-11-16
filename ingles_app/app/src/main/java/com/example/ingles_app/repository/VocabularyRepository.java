@@ -120,20 +120,19 @@ public class VocabularyRepository {
         }
 
         List<CategoryState> states = new ArrayList<>();
-        boolean preoviousDone = true;
         for (Category c : dao.getCategories()) {
             ProgressEntity p = progress.get(c.id);
 
             CategoryState s = new CategoryState();
             s.category = c;
-            s.unlocked = preoviousDone;
+            s.unlocked = c.assigned;
             s.passed = p != null && p.passed;
             s.score = p != null ? p.score : null;
             s.words = dao.countFLashcards(c.id);
             s.testReady = s.unlocked && !s.passed && s.words > 0 && dao.countUnseen(c.id) == 0;
             states.add(s);
 
-            preoviousDone = s.unlocked && s.passed;
+            states.add(s);
         }
         return states;
     }
@@ -270,6 +269,7 @@ public class VocabularyRepository {
         }
 
         for (Category c : dao.getCategories()) {
+            if(!c.assigned) continue;
             ProgressEntity p = progress.get(c.id);
             if (p == null || !p.passed) return c;
         }

@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react'
+import AssignCategoriesModal from './AssginCategories'
 import api from '../api/axiosConfig'
 
 const LEVELS = ['A1', 'A2', 'B1', 'B2', 'C1']
@@ -12,6 +13,7 @@ export default function ListaAlumnos({ datos }) {
   const [students, setStudents] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [assigning, setAssigning] = useState(null)
 
   useEffect(() => {
     api.get('students').then((res) => setStudents(res.data))
@@ -59,6 +61,7 @@ export default function ListaAlumnos({ datos }) {
                 <th>Course</th>
                 <th>Level</th>
                 <th>Promotion</th>
+                <th>Categories</th>
               </tr>
             </thead>
 
@@ -76,13 +79,23 @@ export default function ListaAlumnos({ datos }) {
 
                   <td>
                     {next ? (
-                      <button className='btn btn-sm btn-outline-success' onClick={() => newStudentLevel}>
+                      <button className='btn btn-sm btn-outline-success' onClick={() => newStudentLevel(s)}>
                         <i className='bi bi-arrow-up-circle me-1'></i> Promote to {next}
                       </button>
+
                     ) : (
                       <span className='text-muted'> Highest Level</span>
                     )}
                   </td>
+
+                  <td>
+                      <button
+                        className='btn btn-sm btn-outline-primary'
+                        onClick={() => setAssigning(s)}>
+                          <i className='bi bi-list-check me-1'></i> Assign
+                      </button>
+                  </td>
+
                 </tr>
                 )
               })
@@ -92,6 +105,11 @@ export default function ListaAlumnos({ datos }) {
           </table>
         </>
       )}
+
+      {assigning && (
+        <AssignCategoriesModal student={assigning} onClose={() => setAssigning(null)} />
+      )}
+
     </div>
   )
 }

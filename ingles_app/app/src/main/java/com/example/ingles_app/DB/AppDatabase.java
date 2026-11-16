@@ -11,7 +11,7 @@ import com.example.ingles_app.entities.Flashcards;
 import com.example.ingles_app.entities.ProgressEntity;
 import com.example.ingles_app.entities.ShownCard;
 
-@Database(entities = {Category.class, Flashcards.class, ProgressEntity.class, ShownCard.class}, version = 3)
+@Database(entities = {Category.class, Flashcards.class, ProgressEntity.class, ShownCard.class}, version = 4)
 public abstract class AppDatabase extends RoomDatabase {
 
     public abstract VocabularyDAO vocabularyDAO();

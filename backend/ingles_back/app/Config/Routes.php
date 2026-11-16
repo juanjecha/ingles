@@ -21,6 +21,8 @@ $routes->group('api', ['namespace' => 'App\Controllers\Api'], static function ($
     //$routes->post('students', 'StudentController::save_student', ['filter' => 'jwt']);
     $routes->get('students', 'StudentController::students_list', ['filter' => 'jwt']);
     $routes->post('students/(:num)/promote', 'StudentController::newStudentLevel/$1', ['filter' => 'jwt']);
+    $routes->get('students/(:num)/categories', 'TeacherController::categoriesForStudent', ['filter' => 'jwt']);
+    $routes->post('students/(:num)/categories', 'TeacherController::saveForStudent/$1', ['filter' => 'jwt']);
     
         // Material (web)
     $routes->post('newMaterial', 'MaterialController::new_content', ['filter' => 'jwt']);

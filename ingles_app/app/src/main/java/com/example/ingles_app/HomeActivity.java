@@ -180,7 +180,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private void openCategory(VocabularyRepository.CategoryState s) {
         if (!s.unlocked) {
-            Toast.makeText(this, "Pass the previous category's test to unlock this one",
+            Toast.makeText(this, "Your teacher hasn't assigned this category yet",
             Toast.LENGTH_SHORT).show();
             return;
         }
