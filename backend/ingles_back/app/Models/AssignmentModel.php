@@ -41,8 +41,9 @@ class AssignmentModel extends Model {
                     'category_id' => $categoryID,
                     'assigned_by' => $teacherId,
                 ]);
-                $this->db->transCommit();
-            } 
+                
+            }
+            $this->db->transCommit();
         } catch (\Throwable $e) {
             $this->db->transRollback();
             throw $e;

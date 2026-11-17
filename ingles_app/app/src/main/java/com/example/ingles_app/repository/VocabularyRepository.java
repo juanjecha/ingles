@@ -13,11 +13,13 @@ import com.example.ingles_app.api.GeneralResponse;
 import com.example.ingles_app.api.ProgressRequest;
 import com.example.ingles_app.api.ProgressResponse;
 import com.example.ingles_app.entities.Category;
+import com.example.ingles_app.entities.DailyCard;
 import com.example.ingles_app.entities.Flashcards;
 import com.example.ingles_app.entities.ProgressEntity;
 import com.example.ingles_app.entities.ShownCard;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.Random;
 
 import java.io.IOException;
@@ -130,8 +132,6 @@ public class VocabularyRepository {
             s.score = p != null ? p.score : null;
             s.words = dao.countFLashcards(c.id);
             s.testReady = s.unlocked && !s.passed && s.words > 0 && dao.countUnseen(c.id) == 0;
-            states.add(s);
-
             states.add(s);
         }
         return states;
@@ -296,20 +296,9 @@ public class VocabularyRepository {
         return null;
     }
 
-    // Siguiente palabra nueva para mostrar, o null si hoy ya no toca. Bloqueante.
+    // Next card of the day
     public Flashcards pickNextCard() {
         VocabularyDAO dao = database.vocabularyDAO();
-
-        int shownToday = dao.countShownOn(today());
-        if (shownToday >= DAILY_LIMIT) {
-            Log.d("CARDS", "Daily limit reached (" + shownToday + ")");
-            return null;
-        }
-
-        if (MIN_INTERVAL_MS > 0) {
-            Long last = dao.getLastShownAt();
-            if (last != null && System.currentTimeMillis() - last < MIN_INTERVAL_MS) return null;
-        }
 
         Category active = getActiveCategory();
         if (active == null) {
@@ -317,12 +306,37 @@ public class VocabularyRepository {
             return null;
         }
 
-        Flashcards card = dao.getNextUnseen(active.id);
+        String day = today();
+        if (dao.countDaily(day, active.id) == 0) {
+            buildDailyset(dao, active, day);
+        }
+
+        Flashcards card = dao.getNextDaily(day);
         if (card == null) {
-            Log.d("CARDS", "No unseen words in '" + active.name + "' ("
-                    + dao.getFlashcardsByCat(active.id).size() + " saved on the phone)");
+            Log.d("CARDS", "No words in '"+ active.name +"'");
         }
         return card;
+    }
+
+    private void buildDailyset(VocabularyDAO dao, Category active, String day) {
+        List<Flashcards> pool = new ArrayList<>(dao.getFlashcardsByCat(active.id));
+        Collections.shuffle(pool);
+
+        int n = Math.min(DAILY_LIMIT, pool.size());
+        List<DailyCard> set = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            DailyCard d = new DailyCard();
+            d.flashcardID = pool.get(i).id;
+            d.day = day;
+            d.categoryID = active.id;
+            d.pos = i;
+            d.timesShown = 0;
+            set.add(d);
+        }
+
+        dao.clearDaily();
+        dao.insertDaily(set);
+        Log.d("CARDS", "New daily set for " + day + ": " + n + " cards from '" + active.name + "'");
     }
 
     // Una palabra cualquiera de la categoría activa, sin contar para el límite (para probar)
@@ -351,6 +365,7 @@ public class VocabularyRepository {
         shown.shownDate = today();
         shown.shownAt = System.currentTimeMillis();
         database.vocabularyDAO().markShown(shown);
+        database.vocabularyDAO().bumpDaily(card.id);
     }
 
     private static String today() {

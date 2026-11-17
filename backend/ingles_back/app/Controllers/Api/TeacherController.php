@@ -29,7 +29,7 @@ class TeacherController extends ResourceController {
 
     //GET api/students/{id}/categories: categories appropiate to the student and which ones they have authorized
     public function categoriesForStudent($id = null) {
-        if (!(JWTAuth::$currentUser->rol ?? '') === 'teacher') {
+        if ((JWTAuth::$currentUser->rol ?? '') !== 'teacher') {
             return $this->failForbidden("Only teachers can manage students' categories");
         }
 
@@ -64,7 +64,7 @@ class TeacherController extends ResourceController {
 
     //post api/students/{id}/categories
     public function saveForStudent($id = null) {
-        if (!(JWTAuth::$currentUser->rol ?? '') === 'teacher') {
+        if ((JWTAuth::$currentUser->rol ?? '') !== 'teacher') {
             return $this->failForbidden("Only teachers can manage students' categories");
         }
 
@@ -95,7 +95,7 @@ class TeacherController extends ResourceController {
         return $this->respond([
             'status' => 200,
             'message' => 'categories updated',
-            'assigned' => '$selected',
+            'assigned' => $selected,
         ]);
     }
 }

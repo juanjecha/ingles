@@ -6,6 +6,7 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 import com.example.ingles_app.entities.Category;
+import com.example.ingles_app.entities.DailyCard;
 import com.example.ingles_app.entities.Flashcards;
 import com.example.ingles_app.entities.ProgressEntity;
 import com.example.ingles_app.entities.ShownCard;
@@ -82,4 +83,20 @@ public interface VocabularyDAO {
 
     @Query("SELECT * FROM resource")
     List<Flashcards> getAllFlashcards();
+
+    @Query("SELECT COUNT(*) FROM daily_card WHERE day = :day AND category_id = :categoryID")
+    int countDaily(String day, int categoryID);
+
+    @Query("DELETE FROM daily_card")
+    void clearDaily();
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertDaily(List<DailyCard> cards);
+
+    @Query("SELECT r.* FROM resource r INNER JOIN daily_card d ON d.flashcard_id = r.id " +
+            "WHERE d.day = :day ORDER BY d.times_shown ASC, d.pos ASC LIMIT 1")
+    Flashcards getNextDaily(String day);
+
+    @Query("UPDATE daily_card SET times_shown = times_shown + 1 WHERE flashcard_id = :id")
+    void bumpDaily(int id);
 }

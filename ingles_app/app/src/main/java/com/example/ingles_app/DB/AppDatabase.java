@@ -7,11 +7,12 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
 import com.example.ingles_app.entities.Category;
+import com.example.ingles_app.entities.DailyCard;
 import com.example.ingles_app.entities.Flashcards;
 import com.example.ingles_app.entities.ProgressEntity;
 import com.example.ingles_app.entities.ShownCard;
 
-@Database(entities = {Category.class, Flashcards.class, ProgressEntity.class, ShownCard.class}, version = 4)
+@Database(entities = {Category.class, Flashcards.class, ProgressEntity.class, ShownCard.class, DailyCard.class}, version = 5)
 public abstract class AppDatabase extends RoomDatabase {
 
     public abstract VocabularyDAO vocabularyDAO();
