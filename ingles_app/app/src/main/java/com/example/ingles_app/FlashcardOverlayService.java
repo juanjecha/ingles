@@ -163,6 +163,11 @@ public class FlashcardOverlayService extends Service {
             return;
         }
 
+        if (!preview && !new TimeConfig(this).isAllowedNow()) {
+            Log.d("CARDS", "Outside the student's time window, no card");
+            return;
+        }
+
         if (!Settings.canDrawOverlays(this)) {
             Log.w(TAG, "Missing 'Show over other apps' permission");
             return;

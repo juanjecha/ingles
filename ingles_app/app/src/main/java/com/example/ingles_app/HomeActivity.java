@@ -82,6 +82,9 @@ public class HomeActivity extends AppCompatActivity {
         findViewById(R.id.btnSetup).setOnClickListener(v ->
                 startActivity(new Intent(this, PermissionsActivity.class)));
 
+        findViewById(R.id.btnSchedule).setOnClickListener( v ->
+                startActivity(new Intent(this, ConfigActivity.class)));
+
         if (needsLocalNetworkPermission()) {
             requestPermissions(new String[]{LOCAL_NETWORK}, 100);
         } else {

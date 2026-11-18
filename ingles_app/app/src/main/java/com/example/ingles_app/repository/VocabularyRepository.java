@@ -327,6 +327,7 @@ public class VocabularyRepository {
         for (int i = 0; i < n; i++) {
             DailyCard d = new DailyCard();
             d.flashcardID = pool.get(i).id;
+            Log.d("CARDS", "daily pick: id= " + d.flashcardID + " word=" + pool.get(i).word);
             d.day = day;
             d.categoryID = active.id;
             d.pos = i;
