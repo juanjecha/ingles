@@ -7,6 +7,7 @@ use App\Models\CategoryModel;
 use App\Models\ProgressModel;
 use App\Models\LevelModel;
 use App\Models\AssignmentModel;
+use App\Models\StudentModel;
 use CodeIgniter\RESTful\ResourceController;
 
 class ProgressController extends ResourceController {
@@ -15,6 +16,7 @@ class ProgressController extends ResourceController {
     protected $categoryModel;
     protected $levelModel;
     protected $assignModel;
+    protected $studentModel;
 
     public function __construct()
     {
@@ -22,6 +24,7 @@ class ProgressController extends ResourceController {
         $this->categoryModel = new CategoryModel();
         $this->levelModel = new LevelModel();
         $this->assignModel = new AssignmentModel();
+        $this->studentModel = new StudentModel();
     }
 
     //student's score
@@ -99,5 +102,23 @@ class ProgressController extends ResourceController {
             'message' => 'progress saved succesfully',
             'next_category_id' => $next ? (int) $next['id'] : null,
         ]);
+    }
+
+    public function summary() {
+        $user = JWTAuth::$currentUser;
+        if(($user->rol ?? '') !== 'teacher') {
+            return $this->failForbidden("only teachers can see all the grades");
+        }
+
+        $grades = $this->progressModel;
+        $data = [];
+        foreach ($this->studentModel->show_students() as $s) {
+            $data[] = array_merge([
+                'id' => (int) $s['id'],
+                'name' => $s['name'],
+                'enrollment' => $s['enrollment'],
+            ], $grades->summary((int) $s['id']));
+        }
+        return $this->respond(['status' => 200, 'data' => $data]);
     }
 }

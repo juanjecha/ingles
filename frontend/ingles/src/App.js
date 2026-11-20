@@ -17,10 +17,6 @@ function getUser() {
 }
 
 export default function App() {
-  const puntuaciones = [
-    { alumno: 'Ana López', examen: 'Unidad 1', nota: 90 },
-    { alumno: 'Carlos Pérez', examen: 'Unidad 1', nota: 78 },
-  ]
   const location = useLocation();
   const navigate = useNavigate();
   const esLogin = location.pathname === '/';
@@ -102,7 +98,7 @@ export default function App() {
           <Route path="/" element={<Login />}/>
           <Route path="/main" element={<MainPage />} />
           <Route path="/upload" element={<SubirMaterial />} />
-          <Route path="/scores" element={<VerPuntuaciones datos={puntuaciones} />} />
+          <Route path="/scores" element={<VerPuntuaciones/>} />
           <Route path="/students" element={<ListaAlumnos />} />
           <Route path="/resources" element={<ListMaterial/>} />
         </Routes>

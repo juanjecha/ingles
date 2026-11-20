@@ -23,6 +23,7 @@ $routes->group('api', ['namespace' => 'App\Controllers\Api'], static function ($
     $routes->post('students/(:num)/promote', 'StudentController::newStudentLevel/$1', ['filter' => 'jwt']);
     $routes->get('students/(:num)/categories', 'TeacherController::categoriesForStudent/$1', ['filter' => 'jwt']);
     $routes->post('students/(:num)/categories', 'TeacherController::saveForStudent/$1', ['filter' => 'jwt']);
+    $routes->post('grades', 'ProgressController::summary', ['filter' => 'jwt']);
     
         // Material (web)
     $routes->post('newMaterial', 'MaterialController::new_content', ['filter' => 'jwt']);
